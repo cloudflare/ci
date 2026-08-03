@@ -4,6 +4,14 @@
   "description": "Cloudflare-native continuous integration powered by Workflows and Sandbox",
   "license": "Apache-2.0",
   "author": "Cloudflare",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudflare/ci.git"
+  },
+  "homepage": "https://github.com/cloudflare/ci#readme",
+  "bugs": {
+    "url": "https://github.com/cloudflare/ci/issues"
+  },
   "keywords": [
     "cloudflare",
     "continuous-integration",

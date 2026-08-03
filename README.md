@@ -53,11 +53,8 @@ only provider notification previews and failure messages are redacted.
 - [`examples/self-healing`](./examples/self-healing/) adds an application-owned
   Healing Agent that consumes the package's neutral runner-failure diagnostics.
 
-Both examples are self-contained deployable Workers and install the package from
-this Git repository until it is available from npm. The Healing Agent, its
+Both examples are self-contained deployable Workers. The Healing Agent, its
 tools, and its AI dependencies are not part of `@cloudflare/ci`.
-
-> TODO: Replace the examples' Git dependency with the published package.
 
 ## Develop
 
