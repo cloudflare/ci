@@ -12,7 +12,7 @@
     "cf-typegen": "wrangler types --include-runtime false --strict-vars false --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "@cloudflare/ci": "git+ssh://git@example.com/placeholder/cloudflare-ci.git#main",
+    "@cloudflare/ci": "git+https://github.com/tomashobza/ci.git#main",
     "hono": "^4.10.3"
   },
   "devDependencies": {

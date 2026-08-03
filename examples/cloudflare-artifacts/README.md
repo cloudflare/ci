@@ -1,9 +1,6 @@
 # Cloudflare Artifacts Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO/tree/main/examples/cloudflare-artifacts)
-
-> TODO: Replace the placeholder repository URL when the public mirror is
-> available.
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/cloudflare-artifacts)
 
 A deployable Cloudflare CI Worker using Cloudflare Artifacts as its source
 provider. The pipeline is defined in [`cloudflare.ci.ts`](./cloudflare.ci.ts)

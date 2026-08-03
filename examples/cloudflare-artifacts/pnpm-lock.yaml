@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@cloudflare/ci':
-    specifier: git+ssh://git@example.com/placeholder/cloudflare-ci.git#main
-    version: example.com/placeholder/cloudflare-ci/0000000000000000000000000000000000000000
+    specifier: git+https://github.com/tomashobza/ci.git#main
+    version: github.com/tomashobza/ci/c8a017da3230c4daa159631d49e93cacbeca6295
   hono:
     specifier: ^4.10.3
     version: 4.12.33
@@ -1584,8 +1584,8 @@ packages:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
     dev: false
 
-  example.com/placeholder/cloudflare-ci/0000000000000000000000000000000000000000:
-    resolution: {commit: 0000000000000000000000000000000000000000, repo: ssh://git@example.com/placeholder/cloudflare-ci.git, type: git}
+  github.com/tomashobza/ci/c8a017da3230c4daa159631d49e93cacbeca6295:
+    resolution: {commit: c8a017da3230c4daa159631d49e93cacbeca6295, repo: https://github.com/tomashobza/ci.git, type: git}
     name: '@cloudflare/ci'
     version: 0.1.0
     dependencies:

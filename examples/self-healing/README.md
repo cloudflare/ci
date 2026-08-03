@@ -1,9 +1,6 @@
 # Self-Healing Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO/tree/main/examples/self-healing)
-
-> TODO: Replace the placeholder repository URL when the public mirror is
-> available.
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/self-healing)
 
 A complete Cloudflare CI Worker that extends the basic Cloudflare Artifacts
 pipeline with an application-owned Healing Agent. The agent implementation,
