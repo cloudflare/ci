@@ -1,0 +1,31 @@
+examples/cloudflare-artifacts/README.md
+  s_497a9ff3501d50::t_26cf73e76f1855 3
+examples/cloudflare-artifacts/package.json
+  s_497a9ff3501d50::t_001638b3bac3a7 15
+examples/cloudflare-artifacts/pnpm-lock.yaml
+  s_497a9ff3501d50::t_ea0dda04c7b049 9-10,1587-1588
+examples/self-healing/README.md
+  s_497a9ff3501d50::t_bcc72be192ef00 3
+examples/self-healing/package.json
+  s_497a9ff3501d50::t_0828d55d6f48e2 15
+examples/self-healing/pnpm-lock.yaml
+  s_497a9ff3501d50::t_e5ce2e8cc66879 9-10,4342-4343
+pnpm-lock.yaml
+  s_497a9ff3501d50::t_db4a42bf5e4cec 49-50,77-78,4873-4874
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "69a81177ef856a92047067bf96fc1114ab0af41e",
+  "prompts": {},
+  "sessions": {
+    "s_497a9ff3501d50": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_036d6d503ffeT5FKVv7SGRcWJ7",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}
