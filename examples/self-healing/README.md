@@ -1,6 +1,6 @@
 # Self-Healing Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/self-healing)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ci/tree/main/examples/self-healing)
 
 A complete Cloudflare CI Worker that extends the basic Cloudflare Artifacts
 pipeline with an application-owned Healing Agent. The agent implementation,

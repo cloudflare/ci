@@ -12,7 +12,7 @@
     "cf-typegen": "wrangler types --include-runtime false --strict-vars false --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "@cloudflare/ci": "git+https://github.com/tomashobza/ci.git#main",
+    "@cloudflare/ci": "git+https://github.com/cloudflare/ci.git#main",
     "@cloudflare/sandbox": "0.12.1",
     "@cloudflare/think": "0.15.0",
     "agents": "0.20.0",

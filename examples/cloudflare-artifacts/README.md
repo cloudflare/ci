@@ -1,6 +1,6 @@
 # Cloudflare Artifacts Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/cloudflare-artifacts)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ci/tree/main/examples/cloudflare-artifacts)
 
 A deployable Cloudflare CI Worker using Cloudflare Artifacts as its source
 provider. The pipeline is defined in [`cloudflare.ci.ts`](./cloudflare.ci.ts)
