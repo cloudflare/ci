@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@cloudflare/ci": "git+https://github.com/cloudflare/ci.git#main",
-    "hono": "^4.10.3"
+    "hono": "^4.12.34"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260730.1",

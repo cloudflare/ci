@@ -17,7 +17,7 @@
     "@cloudflare/think": "0.15.0",
     "agents": "0.20.0",
     "ai": "7.0.37",
-    "hono": "^4.10.3",
+    "hono": "^4.12.34",
     "zod": "^4.4.3"
   },
   "devDependencies": {
