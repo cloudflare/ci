@@ -1,0 +1,17 @@
+{
+  "singleQuote": true,
+  "tabWidth": 2,
+  "semi": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "printWidth": 80,
+  "experimentalSortPackageJson": false,
+  "ignorePatterns": [
+    "/dist",
+    "/coverage",
+    "/.nx/cache",
+    "/.nx/workspace-data"
+  ]
+}

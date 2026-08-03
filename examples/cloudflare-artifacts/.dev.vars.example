@@ -1,0 +1,3 @@
+CF_TOKEN=your-cloudflare-api-token # API token used by pipeline runners
+R2_ACCESS_KEY_ID=your-r2-access-key-id # R2 credentials for workspace Snapshots
+R2_SECRET_ACCESS_KEY=your-r2-secret-access-key

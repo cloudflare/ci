@@ -1,0 +1,79 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cloudflare-ci-self-healing",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-16",
+  "compatibility_flags": ["nodejs_compat"],
+  "artifacts": [
+    {
+      "binding": "ARTIFACTS",
+      "namespace": "cloudflare-ci-example",
+    },
+  ],
+  "ai": {
+    "binding": "AI",
+  },
+  "containers": [
+    {
+      "class_name": "CiSandbox",
+      "image": "./Dockerfile",
+      "max_instances": 10,
+      "instance_type": "standard-4",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SANDBOX",
+        "class_name": "CiSandbox",
+      },
+      {
+        "name": "HEALER",
+        "class_name": "Healer",
+      },
+    ],
+  },
+  "queues": {
+    "consumers": [
+      {
+        "queue": "cloudflare-ci-self-healing-events",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+    ],
+  },
+  "workflows": [
+    {
+      "name": "cloudflare-ci-self-healing",
+      "binding": "CI_WORKFLOW",
+      "class_name": "CI",
+    },
+  ],
+  "exports": {
+    "CiSandbox": {
+      "type": "durable-object",
+      "storage": "sqlite",
+    },
+    "Healer": {
+      "type": "durable-object",
+      "storage": "sqlite",
+    },
+  },
+  "r2_buckets": [
+    {
+      "binding": "BACKUP_BUCKET",
+      "bucket_name": "cloudflare-ci-self-healing-backups",
+    },
+  ],
+  "vars": {
+    "BACKUP_BUCKET_NAME": "cloudflare-ci-self-healing-backups",
+    "CLOUDFLARE_ACCOUNT_ID": "your-cloudflare-account-id",
+    "CLOUDFLARE_DEPLOY_ACCOUNT_ID": "your-cloudflare-account-id",
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+    },
+  },
+}

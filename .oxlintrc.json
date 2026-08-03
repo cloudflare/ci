@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "vitest", "promise", "node"],
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "style": "off",
+    "perf": "warn"
+  },
+  "globals": {
+    "WebSocketPair": "readonly"
+  },
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.wrangler/**"
+  ],
+  "rules": {
+    "no-unused-vars": "error",
+    "eqeqeq": "warn",
+    "no-undef": "warn",
+    "no-empty": "warn",
+    "no-console": "off",
+    "curly": "warn",
+    "no-debugger": "warn",
+    "no-unreachable": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "vitest/require-mock-type-parameters": "off"
+  }
+}
