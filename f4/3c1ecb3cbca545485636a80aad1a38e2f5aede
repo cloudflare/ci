@@ -1,0 +1,23 @@
+examples/cloudflare-artifacts/pnpm-lock.yaml
+  s_497a9ff3501d50::t_2387fd550a4a15 10,1587-1588
+examples/self-healing/pnpm-lock.yaml
+  s_497a9ff3501d50::t_c752213093473a 10,4342-4343
+pnpm-lock.yaml
+  s_497a9ff3501d50::t_2a812f384d445a 50,78,4873-4874
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f43c1ecb3cbca545485636a80aad1a38e2f5aede",
+  "prompts": {},
+  "sessions": {
+    "s_497a9ff3501d50": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_036d6d503ffeT5FKVv7SGRcWJ7",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}
