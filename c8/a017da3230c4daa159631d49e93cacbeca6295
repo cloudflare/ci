@@ -1,0 +1,169 @@
+.editorconfig
+  s_64eabb0e38b2ab::t_c5cd0d8ea4639a 1-13
+.gitignore
+  s_64eabb0e38b2ab::t_87b09aa3be1b2f 1-15
+.npmrc
+  s_64eabb0e38b2ab::t_8a9f50a7083530 1-2
+.oxfmtrc.json
+  s_64eabb0e38b2ab::t_7f1dd840db2cda 1-17
+.oxlintrc.json
+  s_64eabb0e38b2ab::t_2b3af0964de3ff 1-36
+LICENSE
+  s_64eabb0e38b2ab::t_b76bb72b68e34f 1-176
+NOTICE
+  s_64eabb0e38b2ab::t_3061f70a3fd3c4 1-4
+README.md
+  s_64eabb0e38b2ab::t_6f20c5d5821d37 1-84
+examples/cloudflare-artifacts/.dev.vars.example
+  s_64eabb0e38b2ab::t_f44c94ef21334f 1-3
+examples/cloudflare-artifacts/Dockerfile
+  s_64eabb0e38b2ab::t_68951814d6a461 1
+examples/cloudflare-artifacts/README.md
+  s_64eabb0e38b2ab::t_e0bbb720a0c06a 1-46
+examples/cloudflare-artifacts/cloudflare.ci.ts
+  s_64eabb0e38b2ab::t_0959b260f3bdf1 1-40
+examples/cloudflare-artifacts/env.ts
+  s_64eabb0e38b2ab::t_8f74ab0d4a87b4 1-8
+examples/cloudflare-artifacts/src/index.ts
+  s_64eabb0e38b2ab::t_2ba0e480e85be4 1-21
+examples/cloudflare-artifacts/tsconfig.json
+  s_64eabb0e38b2ab::t_fc1f51e846cede 1-21
+examples/cloudflare-artifacts/worker-configuration.d.ts
+  s_64eabb0e38b2ab::t_27935d1e533507 1-25
+examples/cloudflare-artifacts/wrangler.jsonc
+  s_64eabb0e38b2ab::t_4ad0fba6a3eda3 1-77
+examples/self-healing/.dev.vars.example
+  s_64eabb0e38b2ab::t_b3073598268b1d 1-3
+examples/self-healing/Dockerfile
+  s_64eabb0e38b2ab::t_2f7c214b9ec019 1
+examples/self-healing/README.md
+  s_64eabb0e38b2ab::t_3fa08a562ffb14 1-50
+examples/self-healing/cloudflare.ci.ts
+  s_64eabb0e38b2ab::t_d9e1eede7d1e94 1-96
+examples/self-healing/env.ts
+  s_64eabb0e38b2ab::t_323b2e9a7602e2 1-8
+examples/self-healing/src/healing/cwd.ts
+  s_64eabb0e38b2ab::t_ddd650233657fe 1-16
+examples/self-healing/src/healing/failures.ts
+  s_64eabb0e38b2ab::t_69f73b7a024a72 1-16
+examples/self-healing/src/healing/healer.test.ts
+  s_64eabb0e38b2ab::t_754df4d315b49b 1-252
+examples/self-healing/src/healing/healer.ts
+  s_64eabb0e38b2ab::t_71ae9038552d3a 1-317
+examples/self-healing/src/healing/push.test.ts
+  s_64eabb0e38b2ab::t_04aeec61b71a07 1-189
+examples/self-healing/src/healing/push.ts
+  s_64eabb0e38b2ab::t_ffd3d7d175c511 1-127
+examples/self-healing/src/healing/sandbox.test.ts
+  s_64eabb0e38b2ab::t_7d1571bd8782c7 1-215
+examples/self-healing/src/healing/sandbox.ts
+  s_64eabb0e38b2ab::t_472b2f2229c11c 1-194
+examples/self-healing/src/healing/tools.test.ts
+  s_64eabb0e38b2ab::t_eb6cc5463b0040 1-91
+examples/self-healing/src/healing/tools.ts
+  s_64eabb0e38b2ab::t_d395f115c4f749 1-270
+examples/self-healing/src/healing/types.ts
+  s_64eabb0e38b2ab::t_b2b676a7b16e99 1-34
+examples/self-healing/src/healing/utils.ts
+  s_64eabb0e38b2ab::t_475d7a34fe594b 1-11
+examples/self-healing/src/index.ts
+  s_64eabb0e38b2ab::t_9adfbd5928cb1d 1-84
+examples/self-healing/tsconfig.json
+  s_64eabb0e38b2ab::t_04eaac7c6539da 1-21
+examples/self-healing/worker-configuration.d.ts
+  s_64eabb0e38b2ab::t_a9dab74606ab75 1-27
+examples/self-healing/wrangler.jsonc
+  s_64eabb0e38b2ab::t_8bc6a55ffae38b 1-79
+package.json
+  s_64eabb0e38b2ab::t_c3eff3f194b5c1 1-58
+pnpm-workspace.yaml
+  s_64eabb0e38b2ab::t_5d5460b033ade1 1-2
+src/artifacts/events.test.ts
+  s_64eabb0e38b2ab::t_c776408166c864 1-301
+src/artifacts/events.ts
+  s_64eabb0e38b2ab::t_f4069050c06524 1-84
+src/artifacts/source-control.ts
+  s_64eabb0e38b2ab::t_d0c3abd68f84c4 1-202
+src/ci/cache.test.ts
+  s_64eabb0e38b2ab::t_35e5a130b4c726 1-260
+src/ci/cache.ts
+  s_64eabb0e38b2ab::t_8d941ac89d79fc 1-282
+src/ci/capabilities.test.ts
+  s_64eabb0e38b2ab::t_090526e76a358c 1-339
+src/ci/capabilities.ts
+  s_64eabb0e38b2ab::t_e273b20658c79a 1-295
+src/ci/dispatch.test.ts
+  s_64eabb0e38b2ab::t_f21e731cd53394 1-69
+src/ci/dispatch.ts
+  s_64eabb0e38b2ab::t_39bedd358ff7de 1-29
+src/ci/run-id.test.ts
+  s_64eabb0e38b2ab::t_44ddaf5c00eda7 1-60
+src/ci/run-id.ts
+  s_64eabb0e38b2ab::t_8d73aec668d921 1-36
+src/ci/runners/runner.ts
+  s_64eabb0e38b2ab::t_aad8c803cb0a10 1-33
+src/ci/runners/sandbox.test.ts
+  s_64eabb0e38b2ab::t_9d10564f8a7e47 1-174
+src/ci/runners/sandbox.ts
+  s_64eabb0e38b2ab::t_5ba57079ccce34 1-242
+src/ci/sandbox.ts
+  s_64eabb0e38b2ab::t_70ae5d1995226b 1-7
+src/ci/step-notification.test.ts
+  s_64eabb0e38b2ab::t_e1b54b8d9b0250 1-179
+src/ci/step-notification.ts
+  s_64eabb0e38b2ab::t_c13174944d2d97 1-148
+src/env.ts
+  s_64eabb0e38b2ab::t_9aa1c1f713e336 1-38
+src/index.ts
+  s_64eabb0e38b2ab::t_d5eba57c9c6c35 1-14
+src/pipeline/ci-workflow.test.ts
+  s_64eabb0e38b2ab::t_285e7acf4536c9 1-612
+src/pipeline/ci-workflow.ts
+  s_64eabb0e38b2ab::t_bda6c094e47c96 1-220
+src/pipeline/failures.ts
+  s_64eabb0e38b2ab::t_d384aefc5ce501 1-56
+src/pipeline/index.ts
+  s_64eabb0e38b2ab::t_44e6f5b3cb0575 1-40
+src/pipeline/runner-group.ts
+  s_64eabb0e38b2ab::t_c3659b426a0056 1-81
+src/pipeline/types.ts
+  s_64eabb0e38b2ab::t_662613d6c24748 1-202
+src/shared/shell.ts
+  s_64eabb0e38b2ab::t_a90224cb54e60e 1-6
+src/shared/slugify.test.ts
+  s_64eabb0e38b2ab::t_7cb5af07913929 1-10
+src/shared/slugify.ts
+  s_64eabb0e38b2ab::t_5365d235a75aa5 1-10
+src/shared/source-checkout.test.ts
+  s_64eabb0e38b2ab::t_6887c82ea4de67 1-32
+src/shared/source-checkout.ts
+  s_64eabb0e38b2ab::t_63fc6f7b79ed6f 1-41
+src/source-control-adapter.test.ts
+  s_64eabb0e38b2ab::t_075575faed8b54 1-50
+src/source-control-adapter.ts
+  s_64eabb0e38b2ab::t_ae0aa30b41c191 1-89
+src/source-control.ts
+  s_64eabb0e38b2ab::t_ab6991294848cf 1-183
+src/worker-source-control.ts
+  s_64eabb0e38b2ab::t_a6d4cb32305fa6 1-5
+src/worker.ts
+  s_64eabb0e38b2ab::t_a262762a1b0481 1-13
+tsconfig.json
+  s_64eabb0e38b2ab::t_429357575ff5b4 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c8a017da3230c4daa159631d49e93cacbeca6295",
+  "prompts": {},
+  "sessions": {
+    "s_64eabb0e38b2ab": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0375f33abffennV643c6QIKcdM",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomas Hobza <thobza@cloudflare.com>"
+    }
+  }
+}
