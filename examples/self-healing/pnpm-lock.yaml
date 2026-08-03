@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@cloudflare/ci':
     specifier: git+https://github.com/cloudflare/ci.git#main
-    version: github.com/cloudflare/ci/c8a017da3230c4daa159631d49e93cacbeca6295
+    version: github.com/cloudflare/ci/69a81177ef856a92047067bf96fc1114ab0af41e
   '@cloudflare/sandbox':
     specifier: 0.12.1
     version: 0.12.1
@@ -4339,8 +4339,8 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
 
-  github.com/cloudflare/ci/c8a017da3230c4daa159631d49e93cacbeca6295:
-    resolution: {commit: c8a017da3230c4daa159631d49e93cacbeca6295, repo: https://github.com/cloudflare/ci.git, type: git}
+  github.com/cloudflare/ci/69a81177ef856a92047067bf96fc1114ab0af41e:
+    resolution: {commit: 69a81177ef856a92047067bf96fc1114ab0af41e, repo: https://github.com/cloudflare/ci.git, type: git}
     name: '@cloudflare/ci'
     version: 0.1.0
     dependencies:
