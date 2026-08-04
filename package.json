@@ -1,0 +1,66 @@
+{
+  "version": "0.1.0",
+  "name": "@cloudflare/ci",
+  "description": "Cloudflare-native continuous integration powered by Workflows and Sandbox",
+  "license": "Apache-2.0",
+  "author": "Cloudflare",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudflare/ci.git"
+  },
+  "homepage": "https://github.com/cloudflare/ci#readme",
+  "bugs": {
+    "url": "https://github.com/cloudflare/ci/issues"
+  },
+  "keywords": [
+    "cloudflare",
+    "continuous-integration",
+    "workers",
+    "workflows",
+    "sandbox"
+  ],
+  "type": "module",
+  "files": ["src", "!src/**/*.test.ts", "README.md", "LICENSE", "NOTICE"],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./worker": {
+      "types": "./src/worker.ts",
+      "import": "./src/worker.ts"
+    },
+    "./worker/source-control": {
+      "types": "./src/worker-source-control.ts",
+      "import": "./src/worker-source-control.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "oxlint",
+    "typecheck": "tsc --noEmit",
+    "format": "oxfmt --write \"**/*.{ts,tsx,md}\" \"!worker-configuration.d.ts\"",
+    "format:check": "oxfmt --check \"**/*.{ts,tsx,md}\" \"!worker-configuration.d.ts\"",
+    "test": "vitest run src --passWithNoTests",
+    "prepublishOnly": "pnpm test && pnpm typecheck && pnpm lint && pnpm format:check"
+  },
+  "dependencies": {
+    "@cloudflare/sandbox": "0.12.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260730.1",
+    "@total-typescript/shoehorn": "^0.1.2",
+    "@types/node": "^24.12.0",
+    "oxfmt": "^0.32.0",
+    "oxlint": "1.73.0",
+    "oxlint-tsgolint": "0.24.0",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.5",
+    "wrangler": "4.118.0"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "publishConfig": {
+    "access": "public"
+  }
+}

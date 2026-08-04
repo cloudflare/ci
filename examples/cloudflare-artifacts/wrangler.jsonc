@@ -1,0 +1,77 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cloudflare-ci-artifacts",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-16",
+  "compatibility_flags": ["nodejs_compat"],
+  "artifacts": [
+    {
+      "binding": "ARTIFACTS",
+      "namespace": "cloudflare-ci-example",
+    },
+  ],
+  "containers": [
+    {
+      "class_name": "CiSandbox",
+      "image": "./Dockerfile",
+      "max_instances": 10,
+      "instance_type": "standard-4",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SANDBOX",
+        "class_name": "CiSandbox",
+      },
+    ],
+  },
+  "triggers": {
+    "events": [
+      {
+        "type": "cf.artifacts.repo.pushed",
+        "filter": {
+          "namespace": "cloudflare-ci-example",
+          "repo_name": "example-repository",
+        },
+        "targets": [
+          {
+            "type": "workflow",
+            "workflow_name": "cloudflare-ci-artifacts",
+          },
+        ],
+      },
+    ],
+  },
+  "workflows": [
+    {
+      "name": "cloudflare-ci-artifacts",
+      "binding": "CI_WORKFLOW",
+      "class_name": "CI",
+    },
+  ],
+  "exports": {
+    "CiSandbox": {
+      "type": "durable-object",
+      "storage": "sqlite",
+    },
+  },
+  "r2_buckets": [
+    {
+      "binding": "BACKUP_BUCKET",
+      "bucket_name": "cloudflare-ci-artifacts-backups",
+    },
+  ],
+
+  "vars": {
+    "BACKUP_BUCKET_NAME": "cloudflare-ci-artifacts-backups",
+    "CLOUDFLARE_ACCOUNT_ID": "your-cloudflare-account-id",
+    "CLOUDFLARE_DEPLOY_ACCOUNT_ID": "your-cloudflare-account-id",
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+    },
+  },
+}

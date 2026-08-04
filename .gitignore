@@ -1,0 +1,15 @@
+.DS_Store
+node_modules
+.turbo
+*.log
+dist
+dist-ssr
+*.local
+.env
+.env*
+.dev.vars
+SECRET.env
+.cache
+.wrangler
+.output
+tmp/

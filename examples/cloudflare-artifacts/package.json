@@ -1,0 +1,55 @@
+{
+  "name": "@cloudflare/ci-example-cloudflare-artifacts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "wrangler deploy --dry-run --containers-rollout=none",
+    "dev": "wrangler dev --inspector-port 9233",
+    "deploy": "wrangler deploy",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "wrangler types --check --include-runtime false --strict-vars false --env-interface CloudflareBindings && tsc --noEmit",
+    "cf-typegen": "wrangler types --include-runtime false --strict-vars false --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "@cloudflare/ci": "^0.1.0",
+    "hono": "^4.10.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260730.1",
+    "@total-typescript/shoehorn": "^0.1.2",
+    "@types/node": "^24.12.0",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.5",
+    "wrangler": "4.118.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "ARTIFACTS": {
+        "description": "Select the Cloudflare Artifacts namespace containing the repository to build."
+      },
+      "BACKUP_BUCKET": {
+        "description": "R2 bucket used to store workspace Snapshots between runners."
+      },
+      "BACKUP_BUCKET_NAME": {
+        "description": "Use the same name as the `BACKUP_BUCKET` R2 bucket."
+      },
+      "CLOUDFLARE_ACCOUNT_ID": {
+        "description": "Cloudflare account ID where this CI Worker runs."
+      },
+      "CLOUDFLARE_DEPLOY_ACCOUNT_ID": {
+        "description": "Cloudflare account ID where pipeline deployments are created. This can be the same as `CLOUDFLARE_ACCOUNT_ID`."
+      },
+      "CF_TOKEN": {
+        "description": "Cloudflare API token used by pipeline runners. Create one from the [API Tokens page](https://dash.cloudflare.com/profile/api-tokens)."
+      },
+      "R2_ACCESS_KEY_ID": {
+        "description": "R2 access key ID used by Sandbox to save workspace Snapshots."
+      },
+      "R2_SECRET_ACCESS_KEY": {
+        "description": "R2 secret access key used by Sandbox to save workspace Snapshots."
+      }
+    }
+  },
+  "packageManager": "pnpm@8.15.6"
+}
