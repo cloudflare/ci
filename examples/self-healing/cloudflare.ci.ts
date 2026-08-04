@@ -8,7 +8,7 @@ import type {
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { getAgentByName } from 'agents';
 import type { Bindings } from './env';
-import { CiRunFailedWithFix } from './src/healing/failures';
+import { CiRunFailedWithFix, enrichFailure } from './src/healing/failures';
 import { HealingAgent } from './src/healing/healer';
 
 export class Healer extends HealingAgent {
@@ -55,26 +55,7 @@ export class CI extends CIWorkflow<CloudflareArtifacts, Bindings> {
             event.instanceId
           );
           using result = await healer.heal({
-            failure: {
-              runId: event.instanceId,
-              source: {
-                owner: event.payload.owner,
-                repo: event.payload.repo,
-                sha: event.payload.sha,
-                providerData: event.payload.providerData,
-              },
-              baseBranch,
-              failures: failure.diagnostics.failures,
-              ...(failure.snapshot === undefined
-                ? {}
-                : { snapshot: failure.snapshot }),
-              verificationCommands: failure.diagnostics.runners.map(
-                ({ command, cwd }) => ({
-                  command,
-                  ...(cwd === undefined ? {} : { cwd }),
-                })
-              ),
-            },
+            failure: enrichFailure({ failure, event, baseBranch }),
             prompt: 'Fix every observed failure without weakening validation.',
           });
           const { branch, commit, steps } = result;
