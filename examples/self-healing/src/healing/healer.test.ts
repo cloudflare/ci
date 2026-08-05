@@ -50,18 +50,18 @@ const failure: HealFailure = {
   baseBranch: 'main',
   failures: [
     {
-      runner: { name: 'test', command: 'bun test' },
+      runner: { name: 'test', command: 'npm run test' },
       output: 'assertion failed',
     },
     {
-      runner: { name: 'lint', command: 'bun lint', cwd: 'apps/example' },
+      runner: { name: 'lint', command: 'npm run lint', cwd: 'apps/example' },
       output: 'lint failed',
     },
   ],
   snapshot: { id: 'snapshot-1', dir: '/workspace' },
   verificationCommands: [
-    { command: 'bun test' },
-    { command: 'bun lint', cwd: 'apps/example' },
+    { command: 'npm run test' },
+    { command: 'npm run lint', cwd: 'apps/example' },
   ],
 };
 
@@ -128,9 +128,9 @@ describe('HealingAgent', () => {
       expect(toolResult).toMatchObject({
         allPassed: true,
         verification: [
-          { command: 'bun test', exitCode: 0 },
+          { command: 'npm run test', exitCode: 0 },
           {
-            command: 'bun lint',
+            command: 'npm run lint',
             cwd: 'apps/example',
             exitCode: 0,
           },
@@ -173,11 +173,11 @@ describe('HealingAgent', () => {
       cwd: '/workspace',
       timeout: 1_000,
     });
-    expect(healingExec).toHaveBeenNthCalledWith(2, 'bun test', {
+    expect(healingExec).toHaveBeenNthCalledWith(2, 'npm run test', {
       cwd: '/workspace',
       timeout: 600_000,
     });
-    expect(healingExec).toHaveBeenNthCalledWith(3, 'bun lint', {
+    expect(healingExec).toHaveBeenNthCalledWith(3, 'npm run lint', {
       cwd: '/workspace/apps/example',
       timeout: 600_000,
     });
@@ -216,7 +216,7 @@ describe('HealingAgent', () => {
     );
 
     await expect(healer.heal({ failure })).rejects.toThrow(
-      'Heal Attempt failed pipeline verification bun test\nstill failing'
+      'Heal Attempt failed pipeline verification npm run test\nstill failing'
     );
     expect(getPushCredentials).not.toHaveBeenCalled();
     expect(mocks.openPushSandbox).not.toHaveBeenCalled();

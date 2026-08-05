@@ -15,20 +15,20 @@ export class CI extends CIWorkflow<CloudflareArtifacts, Bindings> {
   ): Promise<void> {
     const deps = await ci.runner({
       name: 'install',
-      command: 'bun install --frozen-lockfile',
-      cache: { inputs: ['package.json', 'bun.lock'] },
+      command: 'npm ci',
+      cache: { inputs: ['package.json', 'package-lock.json'] },
     });
 
     await Promise.all([
-      deps.runner({ name: 'lint', command: 'bun run lint' }),
-      deps.runner({ name: 'test', command: 'bun run test' }),
-      deps.runner({ name: 'typecheck', command: 'bun run typecheck' }),
-      deps.runner({ name: 'build', command: 'bun run build' }),
+      deps.runner({ name: 'lint', command: 'npm run lint' }),
+      deps.runner({ name: 'test', command: 'npm run test' }),
+      deps.runner({ name: 'typecheck', command: 'npm run typecheck' }),
+      deps.runner({ name: 'build', command: 'npm run build' }),
     ]);
 
     await deps.runner({
       name: 'deploy',
-      command: 'bun wrangler deploy',
+      command: 'npm exec wrangler deploy',
       cloudflareCredentials: {
         accountId: this.env.CLOUDFLARE_DEPLOY_ACCOUNT_ID,
       },
