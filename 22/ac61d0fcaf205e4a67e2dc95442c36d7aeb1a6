@@ -1,0 +1,19 @@
+examples/self-healing/src/healing/healer.test.ts
+  s_82028480d429e0::t_c7719702a17599 53,57,63-64,131,133,176,180,219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "22ac61d0fcaf205e4a67e2dc95442c36d7aeb1a6",
+  "prompts": {},
+  "sessions": {
+    "s_82028480d429e0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_02cffcfb4ffeOWDYiup3WHw6GC",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}
