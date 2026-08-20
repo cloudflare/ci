@@ -1,0 +1,19 @@
+src/ci/cache.ts
+  s_21a69717618546::t_4dbbe11e826b99 15,26,49-50,52-54,84-98,137-139,144-147,150-154,164-165,167,179,195-218,274-346
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4f133299d125a54e83430b840005b3d5bca0b233",
+  "prompts": {},
+  "sessions": {
+    "s_21a69717618546": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a01eba-e7b3-7b70-838c-36a45beff098",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomas Hobza <thobza@cloudflare.com>"
+    }
+  }
+}
