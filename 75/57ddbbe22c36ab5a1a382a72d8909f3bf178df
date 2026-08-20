@@ -1,0 +1,21 @@
+src/ci/runners/sandbox.test.ts
+  s_21a69717618546::t_fe52e44a0a4098 54-154,166,170,220,223,233-239,247-250
+src/ci/runners/sandbox.ts
+  s_21a69717618546::t_ed4faa0e0f34bf 12-16,39-43,48-50,83-88,109-121,128,152,162-221
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7557ddbbe22c36ab5a1a382a72d8909f3bf178df",
+  "prompts": {},
+  "sessions": {
+    "s_21a69717618546": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a01eba-e7b3-7b70-838c-36a45beff098",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomas Hobza <thobza@cloudflare.com>"
+    }
+  }
+}
