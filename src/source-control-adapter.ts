@@ -63,7 +63,11 @@ export function github(
   return createAdapter(
     'github',
     repository,
-    () => new GitHubSourceControlProvider(repository),
+    (env) =>
+      new GitHubSourceControlProvider(
+        requireGitHubWebhookSecret(env),
+        repository
+      ),
     false
   );
 }
@@ -93,6 +97,14 @@ function createAdapter<TProvider extends SourceControlProviderDefinition>(
       }
     },
   };
+}
+
+function requireGitHubWebhookSecret(env: Bindings): string {
+  const secret = env.GITHUB_WEBHOOK_SECRET;
+  if (typeof secret !== 'string' || secret.length === 0) {
+    throw new Error('Missing GITHUB_WEBHOOK_SECRET');
+  }
+  return secret;
 }
 
 function requireCloudflareArtifactsBindings(

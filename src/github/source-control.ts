@@ -10,21 +10,40 @@ import {
   type SourceControlSource,
   type SourceControlTreeBlob,
 } from '../source-control';
+import {
+  mapGitHubPushEventToCiParams,
+  parseGitHubPushEvent,
+  verifyGitHubWebhookSignature,
+} from './events';
 
 /**
- * Public, read-only GitHub source provider foundation. Webhook handling and
- * source fingerprinting are added separately; unavailable fingerprints safely
- * bypass the runner cache.
+ * Public, read-only GitHub source provider. Unavailable source fingerprints
+ * safely bypass the runner cache.
  */
 export class GitHubSourceControlProvider extends SourceControlProvider<GitHub> {
-  constructor(private readonly repository: SourceControlRepositoryFilter) {
+  constructor(
+    private readonly webhookSecret: string,
+    private readonly repository: SourceControlRepositoryFilter
+  ) {
     super();
   }
 
   async receiveEvent(
-    _event: SourceControlEventInput
+    event: SourceControlEventInput
   ): Promise<SourceControlEvent<GitHub> | null> {
-    return null;
+    await verifyGitHubWebhookSignature(event, this.webhookSecret);
+    if (event.headers.get('x-github-event') !== 'push') {
+      return null;
+    }
+    const push = parseGitHubPushEvent(event.body);
+    if (
+      !matches(push.repository.owner.login, this.repository.owner) ||
+      !matches(push.repository.name, this.repository.repo)
+    ) {
+      return null;
+    }
+    const params = mapGitHubPushEventToCiParams(push);
+    return params ? { type: 'run', params } : null;
   }
 
   async getSourceCheckout(source: SourceControlSource) {

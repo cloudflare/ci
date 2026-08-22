@@ -20,7 +20,12 @@ describe('source-control adapters', () => {
         repo: 'workers-sdk',
       })
     ).toBe(false);
-    expect(() => adapter.create({} as Bindings)).not.toThrow();
+    expect(() => adapter.create({} as Bindings)).toThrow(
+      'Missing GITHUB_WEBHOOK_SECRET'
+    );
+    expect(() =>
+      adapter.create({ GITHUB_WEBHOOK_SECRET: 'secret' } as unknown as Bindings)
+    ).not.toThrow();
   });
 
   it('configures a case-sensitive Artifacts repository', () => {
