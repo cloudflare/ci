@@ -1,8 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { cloudflareArtifacts } from './source-control-adapter';
+import { cloudflareArtifacts, github } from './source-control-adapter';
 import type { Bindings } from './env';
 
 describe('source-control adapters', () => {
+  it('configures a case-insensitive GitHub repository', () => {
+    const adapter = github({ owner: 'Cloudflare', repo: 'Workers-SDK' });
+
+    expect(
+      adapter.accepts({
+        provider: 'github',
+        owner: 'cloudflare',
+        repo: 'workers-sdk',
+      })
+    ).toBe(true);
+    expect(
+      adapter.accepts({
+        provider: 'cloudflare-artifacts',
+        owner: 'cloudflare',
+        repo: 'workers-sdk',
+      })
+    ).toBe(false);
+    expect(() => adapter.create({} as Bindings)).not.toThrow();
+  });
+
   it('configures a case-sensitive Artifacts repository', () => {
     const adapter = cloudflareArtifacts({ owner: 'Namespace', repo: 'Repo' });
 

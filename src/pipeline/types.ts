@@ -40,7 +40,15 @@ export type CloudflareArtifacts = SourceControlProviderDefinition<
   { namespace: string }
 >;
 
-export type CiProvider = CloudflareArtifacts;
+export type GitHubEvent = { type: 'push' } | { type: 'tag' };
+
+export type GitHub = SourceControlProviderDefinition<
+  'github',
+  GitHubEvent,
+  { installationId?: number }
+>;
+
+export type CiProvider = CloudflareArtifacts | GitHub;
 
 // Serializable sandbox backup handle (mirrors @cloudflare/sandbox's
 // DirectoryBackup) passed between CI steps as a snapshot reference.
@@ -52,7 +60,7 @@ export type DirectoryBackup = {
 
 // Where a run's source lives. This is display/deployment-origin metadata rather
 // than the source-control provider ID.
-export type CiRemote = 'cloudflare';
+export type CiRemote = 'cloudflare' | 'github';
 
 export type CiParams<
   TProvider extends SourceControlProviderDefinition = CiProvider,

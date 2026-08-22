@@ -4,9 +4,11 @@
 import type { Bindings, CloudflareArtifactsBindings } from './env';
 import type {
   CloudflareArtifacts,
+  GitHub,
   SourceControlProviderDefinition,
 } from './pipeline/types';
 import { CloudflareArtifactsSourceControlProvider } from './artifacts/source-control';
+import { GitHubSourceControlProvider } from './github/source-control';
 import type { SourceControlProvider } from './source-control';
 
 type SourceIdentity = {
@@ -48,6 +50,21 @@ export function cloudflareArtifacts(
         repository
       ),
     true
+  );
+}
+
+/**
+ * Creates a GitHub adapter with case-insensitive repository matching.
+ * Omitted owner or repository fields match any value.
+ */
+export function github(
+  repository: SourceControlRepositoryFilter = {}
+): SourceControlAdapter<GitHub> {
+  return createAdapter(
+    'github',
+    repository,
+    () => new GitHubSourceControlProvider(repository),
+    false
   );
 }
 
