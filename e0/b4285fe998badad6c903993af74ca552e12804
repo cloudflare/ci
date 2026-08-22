@@ -1,0 +1,19 @@
+src/github/source-control.test.ts
+  s_1ca45ffa65f056::t_61ee7beb7647d9 1,89-93,98,108-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e0b4285fe998badad6c903993af74ca552e12804",
+  "prompts": {},
+  "sessions": {
+    "s_1ca45ffa65f056": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a02683-a44a-74eb-9e00-fa150cb8022d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}
