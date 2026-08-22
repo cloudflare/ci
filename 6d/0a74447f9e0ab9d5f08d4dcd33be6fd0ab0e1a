@@ -1,0 +1,31 @@
+src/github/events.test.ts
+  s_1ca45ffa65f056::t_c4deb70579e4c1 1-138
+src/github/events.ts
+  s_1ca45ffa65f056::t_513fb5cace20ed 1-110
+src/github/source-control.test.ts
+  s_1ca45ffa65f056::t_e1da8062d25356 11-22,24-65,105-131
+src/github/source-control.ts
+  s_1ca45ffa65f056::t_12a552e7789044 13-17,20-21,24-27,32,34-46
+src/source-control-adapter.test.ts
+  s_1ca45ffa65f056::t_20e5772178b77d 23-28
+src/source-control-adapter.ts
+  s_1ca45ffa65f056::t_11ea7bfb34f7f6 66-70,102-109
+src/worker-source-control.ts
+  s_1ca45ffa65f056::t_0e476815bd05fa 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6d0a74447f9e0ab9d5f08d4dcd33be6fd0ab0e1a",
+  "prompts": {},
+  "sessions": {
+    "s_1ca45ffa65f056": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a02683-a44a-74eb-9e00-fa150cb8022d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomas Hobza <thobza@cloudflare.com>"
+    }
+  }
+}
