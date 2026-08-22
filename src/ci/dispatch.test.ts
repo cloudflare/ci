@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { fromPartial } from '@total-typescript/shoehorn';
 import { restartCiRun, startCiRun } from './dispatch';
 import { runId } from './run-id';
-import type { Bindings } from '../env';
 import type { CiParams, CloudflareArtifacts } from '../pipeline';
 
 const params = {
@@ -26,6 +25,26 @@ describe('static CI workflow dispatch', () => {
 
     await expect(startCiRun(env, params)).resolves.toBe(id);
     expect(createBatch).toHaveBeenCalledWith([{ id, params }]);
+  });
+
+  it('starts workflows for provider-defined parameter shapes', async () => {
+    const providerParams = {
+      provider: 'example-provider',
+      owner: 'owner',
+      repo: 'repository',
+      sha: 'def456',
+      providerField: 'value',
+    };
+    const id = await runId(providerParams);
+    const createBatch = vi.fn().mockResolvedValue([{ id }]);
+
+    await expect(
+      startCiRun(
+        workflowEnv<typeof providerParams>({ createBatch }),
+        providerParams
+      )
+    ).resolves.toBe(id);
+    expect(createBatch).toHaveBeenCalledWith([{ id, params: providerParams }]);
   });
 
   it('deduplicates an existing commit run', async () => {
@@ -59,11 +78,11 @@ describe('static CI workflow dispatch', () => {
   });
 });
 
-function workflowEnv(workflow: {
+function workflowEnv<TParams = CiParams<CloudflareArtifacts>>(workflow: {
   createBatch?: ReturnType<typeof vi.fn>;
   get?: ReturnType<typeof vi.fn>;
 }) {
-  return fromPartial<Bindings>({
-    CI_WORKFLOW: fromPartial<Bindings['CI_WORKFLOW']>(workflow),
-  });
+  return {
+    CI_WORKFLOW: fromPartial<Workflow<TParams>>(workflow),
+  };
 }

@@ -3,7 +3,7 @@
 
 import type { CloudflareArtifacts } from '../pipeline';
 import type { SourceControlRepositoryFilter } from '../source-control-adapter';
-import type { Bindings } from '../env';
+import type { CloudflareArtifactsBindings } from '../env';
 import {
   matchSourceControlTreeBlobs,
   SourceControlProvider,
@@ -38,7 +38,7 @@ type ArtifactsRepoReader = {
 
 export class CloudflareArtifactsSourceControlProvider extends SourceControlProvider<CloudflareArtifacts> {
   constructor(
-    private readonly env: Pick<Bindings, 'ARTIFACTS' | 'CLOUDFLARE_ACCOUNT_ID'>,
+    private readonly env: CloudflareArtifactsBindings,
     private readonly repository: SourceControlRepositoryFilter
   ) {
     super();

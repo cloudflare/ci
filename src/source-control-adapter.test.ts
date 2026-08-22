@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cloudflareArtifacts } from './source-control-adapter';
+import type { Bindings } from './env';
 
 describe('source-control adapters', () => {
   it('configures a case-sensitive Artifacts repository', () => {
@@ -19,6 +20,23 @@ describe('source-control adapters', () => {
         repo: 'repo',
       })
     ).toBe(false);
+  });
+
+  it('requires Artifacts-specific bindings only when creating the provider', () => {
+    const adapter = cloudflareArtifacts();
+
+    expect(() => adapter.create({} as Bindings)).toThrow(
+      'Missing ARTIFACTS binding'
+    );
+    expect(() =>
+      adapter.create({ ARTIFACTS: {} } as unknown as Bindings)
+    ).toThrow('Missing CLOUDFLARE_ACCOUNT_ID binding');
+    expect(() =>
+      adapter.create({
+        ARTIFACTS: {},
+        CLOUDFLARE_ACCOUNT_ID: '0123456789abcdef0123456789abcdef',
+      } as unknown as Bindings)
+    ).not.toThrow();
   });
 
   it('accepts Artifacts event repository fields that are not configured', () => {

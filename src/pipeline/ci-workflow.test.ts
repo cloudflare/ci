@@ -506,7 +506,7 @@ describe('CIWorkflow ci.runner', () => {
   it('normalizes direct Artifacts trigger payloads before running a pipeline', async () => {
     const workflow = new ArtifactsWorkflow(
       fromPartial<ExecutionContext>({}),
-      fromPartial<Bindings>({})
+      artifactsEnv()
     );
     const directEvent = {
       instanceId: 'instance-1',
@@ -553,7 +553,7 @@ describe('CIWorkflow ci.runner', () => {
   it('ignores unsupported direct Artifacts refs', async () => {
     const workflow = new ArtifactsWorkflow(
       fromPartial<ExecutionContext>({}),
-      fromPartial<Bindings>({})
+      artifactsEnv()
     );
     const notesEvent = {
       instanceId: 'instance-1',
@@ -580,6 +580,13 @@ describe('CIWorkflow ci.runner', () => {
     expect(workflow.pipeline).not.toHaveBeenCalled();
   });
 });
+
+function artifactsEnv() {
+  return fromPartial<Bindings>({
+    ARTIFACTS: {} as Artifacts,
+    CLOUDFLARE_ACCOUNT_ID: '0123456789abcdef0123456789abcdef',
+  });
+}
 
 function immediateWorkflowStep() {
   return fromPartial<WorkflowStep>({

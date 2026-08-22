@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Bindings } from './env';
+import type { Bindings, CloudflareArtifactsBindings } from './env';
 import type {
   CloudflareArtifacts,
   SourceControlProviderDefinition,
@@ -42,7 +42,11 @@ export function cloudflareArtifacts(
   return createAdapter(
     'cloudflare-artifacts',
     repository,
-    (env) => new CloudflareArtifactsSourceControlProvider(env, repository),
+    (env) =>
+      new CloudflareArtifactsSourceControlProvider(
+        requireCloudflareArtifactsBindings(env),
+        repository
+      ),
     true
   );
 }
@@ -71,6 +75,23 @@ function createAdapter<TProvider extends SourceControlProviderDefinition>(
         );
       }
     },
+  };
+}
+
+function requireCloudflareArtifactsBindings(
+  env: Bindings
+): CloudflareArtifactsBindings {
+  const artifacts = env.ARTIFACTS;
+  const accountId = env.CLOUDFLARE_ACCOUNT_ID;
+  if (typeof artifacts !== 'object' || artifacts === null) {
+    throw new Error('Missing ARTIFACTS binding');
+  }
+  if (typeof accountId !== 'string') {
+    throw new Error('Missing CLOUDFLARE_ACCOUNT_ID binding');
+  }
+  return {
+    ARTIFACTS: artifacts as Artifacts,
+    CLOUDFLARE_ACCOUNT_ID: accountId,
   };
 }
 
