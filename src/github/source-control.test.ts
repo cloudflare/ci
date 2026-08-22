@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { GitHubSourceControlProvider } from './source-control';
 
 const source = {
@@ -86,12 +86,16 @@ describe('GitHubSourceControlProvider', () => {
     ).rejects.toThrow('Unsupported GitHub repository: cloudflare/other');
   });
 
-  it('safely bypasses caching until source fingerprinting is available', async () => {
-    const provider = createProvider();
+  it('safely bypasses caching when source fingerprinting is unavailable', async () => {
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockRejectedValue(new Error('offline'));
+    const provider = createProvider({}, fetcher);
 
     await expect(
       provider.listTreeBlobs(source, ['package.json'])
     ).resolves.toBeNull();
+    expect(fetcher).toHaveBeenCalledOnce();
   });
 
   it('does not expose source-control credentials', async () => {
@@ -101,8 +105,11 @@ describe('GitHubSourceControlProvider', () => {
   });
 });
 
-function createProvider(repository: { owner?: string; repo?: string } = {}) {
-  return new GitHubSourceControlProvider('webhook-secret', repository);
+function createProvider(
+  repository: { owner?: string; repo?: string } = {},
+  fetcher: typeof fetch = fetch
+) {
+  return new GitHubSourceControlProvider('webhook-secret', repository, fetcher);
 }
 
 async function webhookEvent(payload: unknown, event = 'push') {

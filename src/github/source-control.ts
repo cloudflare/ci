@@ -10,6 +10,7 @@ import {
   type SourceControlSource,
   type SourceControlTreeBlob,
 } from '../source-control';
+import { listGitHubTreeBlobs } from './api';
 import {
   mapGitHubPushEventToCiParams,
   parseGitHubPushEvent,
@@ -23,7 +24,8 @@ import {
 export class GitHubSourceControlProvider extends SourceControlProvider<GitHub> {
   constructor(
     private readonly webhookSecret: string,
-    private readonly repository: SourceControlRepositoryFilter
+    private readonly repository: SourceControlRepositoryFilter,
+    private readonly fetcher: typeof fetch = fetch
   ) {
     super();
   }
@@ -59,10 +61,14 @@ export class GitHubSourceControlProvider extends SourceControlProvider<GitHub> {
 
   async listTreeBlobs(
     source: SourceControlSource,
-    _paths: string[]
+    paths: string[]
   ): Promise<SourceControlTreeBlob[] | null> {
     this.assertRepository(source.owner, source.repo);
-    return null;
+    try {
+      return await listGitHubTreeBlobs(this.fetcher, source, paths);
+    } catch {
+      return null;
+    }
   }
 
   async getStepCredentialEnv(source: SourceControlSource) {
