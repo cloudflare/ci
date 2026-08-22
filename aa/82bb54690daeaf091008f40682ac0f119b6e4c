@@ -1,0 +1,21 @@
+src/ci/dispatch.test.ts
+  s_1ca45ffa65f056::t_bacf424ebc8e87 30-49,81,85-87
+src/source-control-adapter.ts
+  s_1ca45ffa65f056::t_e12240d1664eef 4,45-49,81-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "aa82bb54690daeaf091008f40682ac0f119b6e4c",
+  "prompts": {},
+  "sessions": {
+    "s_1ca45ffa65f056": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a02683-a44a-74eb-9e00-fa150cb8022d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomas Hobza <thobza@cloudflare.com>"
+    }
+  }
+}
