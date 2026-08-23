@@ -48,8 +48,8 @@ only provider notification previews and failure messages are redacted.
 
 ## Examples
 
-- [`examples/cloudflare-artifacts`](./examples/cloudflare-artifacts/) is a basic
-  install, check, and deploy pipeline.
+- [`examples/github`](./examples/github/) is a basic install, check, and deploy
+  pipeline triggered by signed GitHub webhooks.
 - [`examples/self-healing`](./examples/self-healing/) adds an application-owned
   Healing Agent that consumes the package's neutral runner-failure diagnostics.
 
@@ -68,8 +68,8 @@ pnpm build
 ```
 
 Run an example's commands from its own directory. Each example has an independent
-package manifest, lockfile, TypeScript configuration, and Wrangler configuration
-so Cloudflare can deploy the example subdirectory as a standalone repository.
+package manifest, lockfile, TypeScript configuration, and Wrangler configuration so
+Cloudflare can deploy the example subdirectory directly.
 The package publishes its TypeScript source directly and targets Workers-aware
 bundlers rather than producing a Node.js-compatible `dist` build.
 

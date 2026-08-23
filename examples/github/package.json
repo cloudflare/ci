@@ -1,5 +1,5 @@
 {
-  "name": "@cloudflare/ci-example-cloudflare-artifacts",
+  "name": "@cloudflare/ci-example-github",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "cf-typegen": "wrangler types --include-runtime false --strict-vars false --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "@cloudflare/ci": "^0.1.0",
+    "@cloudflare/ci": "link:../..",
     "hono": "^4.10.3"
   },
   "devDependencies": {
@@ -25,20 +25,17 @@
   },
   "cloudflare": {
     "bindings": {
-      "ARTIFACTS": {
-        "description": "Select the Cloudflare Artifacts namespace containing the repository to build."
-      },
       "BACKUP_BUCKET": {
         "description": "R2 bucket used to store workspace Snapshots between runners."
       },
       "BACKUP_BUCKET_NAME": {
         "description": "Use the same name as the `BACKUP_BUCKET` R2 bucket."
       },
-      "CLOUDFLARE_ACCOUNT_ID": {
-        "description": "Cloudflare account ID where this CI Worker runs."
-      },
       "CLOUDFLARE_DEPLOY_ACCOUNT_ID": {
-        "description": "Cloudflare account ID where pipeline deployments are created. This can be the same as `CLOUDFLARE_ACCOUNT_ID`."
+        "description": "Cloudflare account ID where pipeline deployments are created."
+      },
+      "GITHUB_WEBHOOK_SECRET": {
+        "description": "Shared secret used to verify GitHub webhook deliveries."
       },
       "CF_TOKEN": {
         "description": "Cloudflare API token used by pipeline runners. Create one from the [API Tokens page](https://dash.cloudflare.com/profile/api-tokens)."

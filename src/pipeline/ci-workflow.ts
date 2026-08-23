@@ -61,7 +61,7 @@ export abstract class CIWorkflow<
    * Returns the adapter used for events, checkout, credentials, and reporting.
    * Subclasses may override this to select another source-control provider.
    */
-  static getProvider(): SourceControlAdapter {
+  static getProvider(): SourceControlAdapter<SourceControlProviderDefinition> {
     return cloudflareArtifacts();
   }
 

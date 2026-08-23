@@ -1,15 +1,19 @@
-import { CIWorkflow } from '@cloudflare/ci';
-import type { CiContext, CiParams, CloudflareArtifacts } from '@cloudflare/ci';
+import { CIWorkflow, github } from '@cloudflare/ci';
+import type { CiContext, CiParams, GitHub } from '@cloudflare/ci';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import type { Bindings } from './env';
 
-// The repository this pipeline builds is scoped by the `triggers.events` filter
-// in wrangler.jsonc, so no `getProvider()` override is needed here. To restrict
-// the pipeline to a specific source at the application level as well, override
-// `getProvider()` to return `cloudflareArtifacts({ owner, repo })`.
-export class CI extends CIWorkflow<CloudflareArtifacts, Bindings> {
+// The repository webhook scopes incoming events. Pass { owner, repo } here as
+// an additional application-level restriction when sharing a webhook secret.
+export const sourceControl = github();
+
+export class CI extends CIWorkflow<GitHub, Bindings> {
+  static override getProvider() {
+    return sourceControl;
+  }
+
   protected async pipeline(
-    _event: WorkflowEvent<CiParams<CloudflareArtifacts>>,
+    _event: WorkflowEvent<CiParams<GitHub>>,
     _step: WorkflowStep,
     ci: CiContext
   ): Promise<void> {
