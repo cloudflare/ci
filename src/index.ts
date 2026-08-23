@@ -1,7 +1,13 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-export { CIWorkflow, cloudflareArtifacts, isCiRunnerFailure } from './pipeline';
+export {
+  CIWorkflow,
+  cloudflareArtifacts,
+  createAdapter,
+  isCiRunnerFailure,
+  SourceControlProvider,
+} from './pipeline';
 export type {
   CiContext,
   CiParams,
@@ -11,4 +17,12 @@ export type {
   CloudflareArtifacts,
   CloudflareArtifactsPushEvent,
   RunnerConfig,
+  SourceControlAdapter,
+  SourceControlCheckout,
+  SourceControlEvent,
+  SourceControlEventInput,
+  SourceControlProviderDefinition,
+  SourceControlRepositoryFilter,
+  SourceControlSource,
+  SourceControlTreeBlob,
 } from './pipeline';

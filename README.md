@@ -36,6 +36,10 @@ The package targets the Cloudflare Workers runtime directly. It intentionally
 uses Workers modules and Cloudflare runtime libraries internally rather than
 providing a Node.js-compatible build.
 
+Custom source-control providers subclass `SourceControlProvider`, wrap
+themselves with `createAdapter`, and return that adapter from
+`CIWorkflow.getProvider()`. Cloudflare Artifacts remains the default provider.
+
 Reusable primitives needed by a deployable Worker entry point are exposed from
 `@cloudflare/ci/worker`. The HTTP routes, queue handler, Wrangler configuration,
 bindings, and concrete Workflow classes remain application code in each

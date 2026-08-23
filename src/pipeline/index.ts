@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export { CIWorkflow } from './ci-workflow';
-export { cloudflareArtifacts } from '../source-control-adapter';
+export { cloudflareArtifacts, createAdapter } from '../source-control-adapter';
+export { SourceControlProvider } from '../source-control';
 export { CiRunnerFailure, isCiRunnerFailure } from './failures';
 export type {
   CiObservedRunnerFailure,
@@ -37,4 +38,9 @@ export type {
 export type {
   CreatePullRequestInput,
   CreatePullRequestResult,
+  SourceControlCheckout,
+  SourceControlEvent,
+  SourceControlEventInput,
+  SourceControlSource,
+  SourceControlTreeBlob,
 } from '../source-control';
