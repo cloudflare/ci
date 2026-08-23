@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@cloudflare/ci':
-    specifier: link:../..
-    version: link:../..
+    specifier: github:tomashobza/ci#51115bd8ac0b5f394bdd350e65cc04918863dfb8
+    version: github.com/tomashobza/ci/51115bd8ac0b5f394bdd350e65cc04918863dfb8
   hono:
     specifier: ^4.10.3
     version: 4.13.0
@@ -34,10 +34,34 @@ devDependencies:
 
 packages:
 
+  /@cloudflare/containers@0.3.7:
+    resolution: {integrity: sha512-DM9dm3FnIBSyiSJ1FLavKwl/lk3oAmTaynCzZQ9pZR0ncRPquSxkxd8Nu2MFILxmDDsPkxKsSNEh9mHHMty4Fw==}
+    dev: false
+
   /@cloudflare/kv-asset-handler@0.5.0:
     resolution: {integrity: sha512-jxQYkj8dSIzc0cD6cMMNdOc1UVjqSqu8BZdor5s8cGjW2I8BjODt/kWPVdY+u9zj3ms75Q5qaZgnxUad83+eAg==}
     engines: {node: '>=22.0.0'}
     dev: true
+
+  /@cloudflare/sandbox@0.12.1:
+    resolution: {integrity: sha512-P1ZmNDLYtuEY1ZUcAx0OgTol98VqS617LGd4nf1RTOjSV2yHLDAp59NI36/gg3/pxkHPgmAEyFIjH/ie8FoA7g==}
+    peerDependencies:
+      '@openai/agents': ^0.3.3
+      '@opencode-ai/sdk': ^1.1.40
+      '@xterm/xterm': '>=5.0.0'
+    peerDependenciesMeta:
+      '@openai/agents':
+        optional: true
+      '@opencode-ai/sdk':
+        optional: true
+      '@xterm/xterm':
+        optional: true
+    dependencies:
+      '@cloudflare/containers': 0.3.7
+      aws4fetch: 1.0.20
+      capnweb: 0.8.0
+      hono: 4.13.0
+    dev: false
 
   /@cloudflare/unenv-preset@2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260730.1):
     resolution: {integrity: sha512-ECxObrMfyTl5bhQf/lZCXwo5G6xX9IAUo+nDMKK4SZ8m4Jvvxp52vilxyySSWh2YTZz8+HQ07qGH/2rEom1vDw==}
@@ -874,9 +898,17 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /aws4fetch@1.0.20:
+    resolution: {integrity: sha512-/djoAN709iY65ETD6LKCtyyEI04XIBP5xVvfmNxsEP0uJB5tyaGBztSryRr4HqMStr9R06PisQE7m9zDTXKu6g==}
+    dev: false
+
   /blake3-wasm@2.1.5:
     resolution: {integrity: sha512-F1+K8EbfOZE49dtoPtmxUQrpXaBIl3ICvasLh+nJta0xkz+9kF/7uet9fLnwKqhDrmj6g+6K3Tw9yQPUg2ka5g==}
     dev: true
+
+  /capnweb@0.8.0:
+    resolution: {integrity: sha512-BK/TuXUiyfLSKsmjojn70yN7oYG/JJzoURZ3tckjg5Zj2KcygPm0A5jyOlswK7SYB4f0Gh9tt+RZ132b80iLfA==}
+    dev: false
 
   /chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
@@ -1488,3 +1520,20 @@ packages:
       cookie: 1.1.1
       youch-core: 0.3.3
     dev: true
+
+  /zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+    dev: false
+
+  github.com/tomashobza/ci/51115bd8ac0b5f394bdd350e65cc04918863dfb8:
+    resolution: {tarball: https://codeload.github.com/tomashobza/ci/tar.gz/51115bd8ac0b5f394bdd350e65cc04918863dfb8}
+    name: '@cloudflare/ci'
+    version: 0.1.0
+    dependencies:
+      '@cloudflare/sandbox': 0.12.1
+      zod: 4.4.3
+    transitivePeerDependencies:
+      - '@openai/agents'
+      - '@opencode-ai/sdk'
+      - '@xterm/xterm'
+    dev: false

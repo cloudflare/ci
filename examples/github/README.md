@@ -1,6 +1,6 @@
 # GitHub Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ci/tree/github/examples/github)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/github)
 
 A deployable Cloudflare CI Worker that starts durable Workflows from signed
 GitHub repository webhooks. The pipeline is defined in
@@ -13,27 +13,31 @@ repositories. Source archives and cache fingerprints are read without a GitHub
 access token. Private repositories, GitHub Checks, pull requests, and
 self-healing write access are not included yet.
 
-The example links `@cloudflare/ci` to the repository root so it can exercise the
-unpublished GitHub provider on this proof-of-concept branch.
+The example pins `@cloudflare/ci` to the proof-of-concept commit on GitHub so
+the example remains isolated when Deploy to Cloudflare extracts this
+subdirectory.
 
 ## Configure Cloudflare
 
-Set `CLOUDFLARE_DEPLOY_ACCOUNT_ID` in [`wrangler.jsonc`](./wrangler.jsonc) and
-keep `BACKUP_BUCKET_NAME` equal to the configured `BACKUP_BUCKET` bucket name.
-Create that R2 bucket before deploying if it does not already exist.
+Keep `BACKUP_BUCKET_NAME` in [`wrangler.jsonc`](./wrangler.jsonc) equal to the
+configured `BACKUP_BUCKET` bucket name. Create that R2 bucket before deploying
+if it does not already exist.
 
 Copy [`.dev.vars.example`](./.dev.vars.example) to `.dev.vars` for local
 development. For a deployed Worker, configure the secrets directly:
 
 ```sh
 pnpm exec wrangler secret put GITHUB_WEBHOOK_SECRET
+pnpm exec wrangler secret put CLOUDFLARE_DEPLOY_ACCOUNT_ID
 pnpm exec wrangler secret put CF_TOKEN
 pnpm exec wrangler secret put R2_ACCESS_KEY_ID
 pnpm exec wrangler secret put R2_SECRET_ACCESS_KEY
 ```
 
 Use a new random value for `GITHUB_WEBHOOK_SECRET`; it authenticates webhook
-deliveries but does not grant repository access.
+deliveries but does not grant repository access. Set
+`CLOUDFLARE_DEPLOY_ACCOUNT_ID` to the account where successful pipeline builds
+should deploy.
 
 ## Configure GitHub
 

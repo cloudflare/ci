@@ -42,7 +42,6 @@
 
   "vars": {
     "BACKUP_BUCKET_NAME": "cloudflare-ci-github-backups",
-    "CLOUDFLARE_DEPLOY_ACCOUNT_ID": "your-cloudflare-account-id",
   },
   "observability": {
     "enabled": true,
