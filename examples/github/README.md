@@ -1,10 +1,11 @@
 # GitHub Example
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tomashobza/ci/tree/main/examples/github)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ci/tree/github/examples/github)
 
 A deployable Cloudflare CI Worker that starts durable Workflows from signed
 GitHub repository webhooks. The pipeline is defined in
-[`cloudflare.ci.ts`](./cloudflare.ci.ts).
+[`cloudflare.ci.ts`](./cloudflare.ci.ts). For coding-agent-driven setup and
+verification, follow [`AGENTS.md`](./AGENTS.md).
 
 ## Current scope
 
@@ -15,7 +16,8 @@ self-healing write access are not included yet.
 
 The example pins `@cloudflare/ci` to the proof-of-concept commit on GitHub so
 the example remains isolated when Deploy to Cloudflare extracts this
-subdirectory.
+subdirectory. Before enabling a webhook, tailor the package-manager commands
+and cache inputs in `cloudflare.ci.ts` to the target repository.
 
 ## Configure Cloudflare
 
@@ -40,6 +42,13 @@ deliveries but does not grant repository access. Set
 `CLOUDFLARE_ACCOUNT_ID` to the account where CI and its backup bucket run. Set
 `CLOUDFLARE_DEPLOY_ACCOUNT_ID` and `CLOUDFLARE_DEPLOY_API_TOKEN` for the account
 where successful pipeline builds should deploy.
+
+## Check Cloudflare Access
+
+The webhook endpoint must be reachable by GitHub. An unsigned `POST` should
+reach the Worker and return `401`. If Access intercepts it, follow the
+Service Auth instructions in [`AGENTS.md`](./AGENTS.md); do not create a Bypass
+or Everyone policy.
 
 ## Configure GitHub
 
@@ -71,7 +80,7 @@ invalid push payload.
 Run these from this directory:
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm test
 pnpm typecheck
 pnpm build
