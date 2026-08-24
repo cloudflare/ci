@@ -28,16 +28,18 @@ development. For a deployed Worker, configure the secrets directly:
 
 ```sh
 pnpm exec wrangler secret put GITHUB_WEBHOOK_SECRET
+pnpm exec wrangler secret put CLOUDFLARE_ACCOUNT_ID
 pnpm exec wrangler secret put CLOUDFLARE_DEPLOY_ACCOUNT_ID
-pnpm exec wrangler secret put CF_TOKEN
+pnpm exec wrangler secret put CLOUDFLARE_DEPLOY_API_TOKEN
 pnpm exec wrangler secret put R2_ACCESS_KEY_ID
 pnpm exec wrangler secret put R2_SECRET_ACCESS_KEY
 ```
 
 Use a new random value for `GITHUB_WEBHOOK_SECRET`; it authenticates webhook
 deliveries but does not grant repository access. Set
-`CLOUDFLARE_DEPLOY_ACCOUNT_ID` to the account where successful pipeline builds
-should deploy.
+`CLOUDFLARE_ACCOUNT_ID` to the account where CI and its backup bucket run. Set
+`CLOUDFLARE_DEPLOY_ACCOUNT_ID` and `CLOUDFLARE_DEPLOY_API_TOKEN` for the account
+where successful pipeline builds should deploy.
 
 ## Configure GitHub
 

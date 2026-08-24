@@ -12,7 +12,7 @@
     "cf-typegen": "wrangler types --include-runtime false --strict-vars false --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "@cloudflare/ci": "github:tomashobza/ci#51115bd8ac0b5f394bdd350e65cc04918863dfb8",
+    "@cloudflare/ci": "github:tomashobza/ci#350db56f770d9652e62a8bbcfb7ab3d4568731fe",
     "hono": "^4.10.3"
   },
   "devDependencies": {
@@ -34,11 +34,14 @@
       "CLOUDFLARE_DEPLOY_ACCOUNT_ID": {
         "description": "Cloudflare account ID where pipeline deployments are created."
       },
+      "CLOUDFLARE_ACCOUNT_ID": {
+        "description": "Cloudflare account ID where this CI Worker, Workflow, and backup bucket run."
+      },
       "GITHUB_WEBHOOK_SECRET": {
         "description": "Shared secret used to verify GitHub webhook deliveries."
       },
-      "CF_TOKEN": {
-        "description": "Cloudflare API token used by pipeline runners. Create one from the [API Tokens page](https://dash.cloudflare.com/profile/api-tokens)."
+      "CLOUDFLARE_DEPLOY_API_TOKEN": {
+        "description": "Cloudflare API token used by pipeline deployments. Create one from the [API Tokens page](https://dash.cloudflare.com/profile/api-tokens)."
       },
       "R2_ACCESS_KEY_ID": {
         "description": "R2 access key ID used by Sandbox to save workspace Snapshots."
