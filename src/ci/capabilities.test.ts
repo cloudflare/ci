@@ -79,7 +79,7 @@ describe('runCiStep', () => {
 
     await runCiStep(
       fromPartial<Bindings>({
-        CF_TOKEN: 'deploy-token',
+        CLOUDFLARE_DEPLOY_API_TOKEN: 'deploy-token',
         CLOUDFLARE_ACCOUNT_ID: 'ci-host-account',
       }),
       adapter,
@@ -97,6 +97,20 @@ describe('runCiStep', () => {
         },
       })
     );
+  });
+
+  it('requires a deployment API token when credentials are requested', async () => {
+    const { adapter } = sourceControl();
+
+    await expect(
+      runCiStep(fromPartial<Bindings>({}), adapter, {
+        ...input,
+        cloudflareCredentials: true,
+      })
+    ).rejects.toThrow(
+      'runner(test): missing CLOUDFLARE_DEPLOY_API_TOKEN secret'
+    );
+    expect(mocks.run).not.toHaveBeenCalled();
   });
 
   it('rejects malformed deployment credentials before starting a runner', async () => {

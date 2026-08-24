@@ -3,7 +3,10 @@
 
 type Secrets = {
   [name: string]: unknown;
-  CF_TOKEN: string;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  CLOUDFLARE_DEPLOY_API_TOKEN?: string;
+  // Legacy name retained while existing deployments migrate.
+  CF_TOKEN?: string;
   R2_ACCESS_KEY_ID: string;
   R2_SECRET_ACCESS_KEY: string;
 };

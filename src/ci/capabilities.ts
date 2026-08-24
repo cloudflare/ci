@@ -114,7 +114,7 @@ async function prepareStep(
       input.cloudflareCredentials,
       input.label
     );
-    extraEnv.CLOUDFLARE_API_TOKEN = env.CF_TOKEN;
+    extraEnv.CLOUDFLARE_API_TOKEN = deploymentApiToken(env, input.label);
     if (credentials.accountId) {
       extraEnv.CLOUDFLARE_ACCOUNT_ID = credentials.accountId;
     }
@@ -275,6 +275,16 @@ async function resolveStepCacheKey(
     matchedBlobs: blobs.map((blob) => `${blob.path}:${blob.sha}`),
   });
   return cacheKey;
+}
+
+function deploymentApiToken(env: Bindings, label: string): string {
+  const token = env.CLOUDFLARE_DEPLOY_API_TOKEN ?? env.CF_TOKEN;
+  if (typeof token !== 'string' || token.length === 0) {
+    throw new Error(
+      `runner(${label}): missing CLOUDFLARE_DEPLOY_API_TOKEN secret`
+    );
+  }
+  return token;
 }
 
 /**
