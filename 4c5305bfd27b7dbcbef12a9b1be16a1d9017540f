@@ -1,0 +1,21 @@
+examples/self-healing/cloudflare.ci.ts
+  s_64eabb0e38b2ab::t_185af590c81191 11,58
+examples/self-healing/src/healing/failures.ts
+  s_64eabb0e38b2ab::t_db99665f448600 1-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4c5305bfd27b7dbcbef12a9b1be16a1d9017540f",
+  "prompts": {},
+  "sessions": {
+    "s_64eabb0e38b2ab": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0375f33abffennV643c6QIKcdM",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}

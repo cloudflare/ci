@@ -1,0 +1,19 @@
+examples/github/pnpm-lock.yaml
+  s_1ca45ffa65f056::t_2bb8be2a6fdd57 9-10,1528-1529
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "8d859c419e76a33978ea737a5fba25a74cfccf38",
+  "prompts": {},
+  "sessions": {
+    "s_1ca45ffa65f056": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a02683-a44a-74eb-9e00-fa150cb8022d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Tomáš Hobza <hobza.tomas@gmail.com>"
+    }
+  }
+}
