@@ -38,9 +38,17 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
   async run(
     input: RunStepInput & { restore?: DirectoryBackup }
   ): Promise<RunStepResult<DirectoryBackup>> {
+    // In local dev (`wrangler dev`) the container has no /dev/fuse, so backups
+    // must use the localBucket path (unsquashfs, no FUSE). That path also needs
+    // the rpc transport: on http, restore base64-encodes the whole archive into
+    // a single writeFile request, which fails with 413 for large archives. rpc
+    // streams the archive instead. Toggled by LOCAL_DEV; unset in production.
+    const localBucket = Boolean(
+      (this.env as Bindings & { LOCAL_DEV?: unknown }).LOCAL_DEV
+    );
     // create the sandbox handle
     const sandbox = getSandbox(this.env.SANDBOX, createRunnerId(input.label), {
-      transport: 'http',
+      transport: localBucket ? 'rpc' : 'http',
       enableDefaultSession: false,
       containerTimeouts: { portReadyTimeoutMS: PORT_READY_TIMEOUT_MS },
     });
@@ -95,6 +103,7 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
         name: input.label,
         multipart: true,
         ttl: input.ttlSeconds,
+        localBucket,
       });
       const rawLogs = await readLogs(sandbox);
       const streams = [rawLogs.stdout, rawLogs.stderr].filter(

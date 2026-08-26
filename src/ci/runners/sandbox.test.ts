@@ -30,7 +30,33 @@ describe('SandboxRunner', () => {
       autoCleanup: false,
     });
     expect(sandbox.createBackup).toHaveBeenCalledOnce();
+    expect(sandbox.createBackup).toHaveBeenCalledWith(
+      expect.objectContaining({ localBucket: false })
+    );
+    expect(mocks.getSandbox).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(String),
+      expect.objectContaining({ transport: 'http' })
+    );
     expect(sandbox.destroy).toHaveBeenCalledOnce();
+  });
+
+  it('uses the localBucket + rpc path when LOCAL_DEV is set', async () => {
+    const sandbox = fakeSandbox();
+    mocks.getSandbox.mockReturnValue(sandbox);
+
+    await runner({ LOCAL_DEV: 'true' }).run(input);
+
+    // localBucket avoids FUSE; rpc streams the archive so restore does not
+    // base64-encode it into a single 413-sized writeFile request.
+    expect(sandbox.createBackup).toHaveBeenCalledWith(
+      expect.objectContaining({ localBucket: true })
+    );
+    expect(mocks.getSandbox).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(String),
+      expect.objectContaining({ transport: 'rpc' })
+    );
   });
 
   it('restores a snapshot before overlaying the current source', async () => {
@@ -108,8 +134,8 @@ describe('SandboxRunner', () => {
   });
 });
 
-function runner() {
-  return new SandboxRunner(fromPartial<Bindings>({ SANDBOX: {} }));
+function runner(env?: Record<string, unknown>) {
+  return new SandboxRunner(fromPartial<Bindings>({ SANDBOX: {}, ...env }));
 }
 
 function fakeSandbox(options?: {
