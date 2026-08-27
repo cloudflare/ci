@@ -43,8 +43,11 @@ example.
 
 Runner commands execute inside retryable Workflow steps. Commands with external
 side effects must therefore be idempotent, as required by Cloudflare Workflows.
-`CiRunnerResult.logs` contains raw command output and is not secret-redacted;
-only provider notification previews and failure messages are redacted.
+`CiRunnerResult.logs` carries command output with the step's known secrets
+redacted, the same set applied to provider notification previews and failure
+messages. A log delivered as a stream is the exception and is passed through
+untouched, because rewriting it would mean buffering the stream the runner
+chose not to buffer.
 
 ## Examples
 
