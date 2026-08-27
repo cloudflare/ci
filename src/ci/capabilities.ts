@@ -14,6 +14,7 @@ import {
 } from './cache';
 import type { Bindings } from '../env';
 import { SandboxRunner } from './runners/sandbox';
+import { checkoutSensitiveValues } from '../shared/source-checkout';
 import type {
   SourceControlCheckout,
   SourceControlProvider,
@@ -77,7 +78,12 @@ export async function runCiStep<
       handle,
       label: input.label,
       command: input.command,
-      sensitiveValues: Object.values(prepared.extraEnv),
+      sensitiveValues: [
+        ...Object.values(prepared.extraEnv),
+        // The checkout is issued its own credential, separate from the ones
+        // merged into the command environment, so redaction has to cover both.
+        ...checkoutSensitiveValues(prepared.checkout),
+      ],
     },
     () => executeStep(env, input, prepared),
     (execution) => finalizeStep(env, input, prepared, execution)
