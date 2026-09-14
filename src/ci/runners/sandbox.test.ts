@@ -36,19 +36,18 @@ describe('SandboxRunner', () => {
     expect(mocks.getSandbox).toHaveBeenCalledWith(
       expect.anything(),
       expect.any(String),
-      expect.objectContaining({ transport: 'http' })
+      expect.objectContaining({ transport: 'rpc' })
     );
     expect(sandbox.destroy).toHaveBeenCalledOnce();
   });
 
-  it('uses the localBucket + rpc path when LOCAL_DEV is set', async () => {
-    const sandbox = fakeSandbox();
+  it('uses the localBucket path when FUSE is unavailable', async () => {
+    const sandbox = fakeSandbox({ hasFuse: false });
     mocks.getSandbox.mockReturnValue(sandbox);
 
-    await runner({ LOCAL_DEV: 'true' }).run(input);
+    await runner().run(input);
 
-    // localBucket avoids FUSE; rpc streams the archive so restore does not
-    // base64-encode it into a single 413-sized writeFile request.
+    expect(sandbox.exec).toHaveBeenNthCalledWith(1, 'test -c /dev/fuse');
     expect(sandbox.createBackup).toHaveBeenCalledWith(
       expect.objectContaining({ localBucket: true })
     );
@@ -66,12 +65,13 @@ describe('SandboxRunner', () => {
 
     await runner().run({ ...input, restore });
 
+    expect(sandbox.exec).toHaveBeenNthCalledWith(1, 'test -c /dev/fuse');
     expect(sandbox.restoreBackup).toHaveBeenCalledWith(restore);
     expect(sandbox.restoreBackup.mock.invocationCallOrder[0]).toBeLessThan(
-      sandbox.exec.mock.invocationCallOrder[0]!
+      sandbox.exec.mock.invocationCallOrder[1]!
     );
     expect(sandbox.exec).toHaveBeenNthCalledWith(
-      1,
+      2,
       expect.stringMatching(/^mkdir -p/),
       expect.objectContaining({ cwd: '/' })
     );
@@ -134,12 +134,13 @@ describe('SandboxRunner', () => {
   });
 });
 
-function runner(env?: Record<string, unknown>) {
-  return new SandboxRunner(fromPartial<Bindings>({ SANDBOX: {}, ...env }));
+function runner() {
+  return new SandboxRunner(fromPartial<Bindings>({ SANDBOX: {} }));
 }
 
 function fakeSandbox(options?: {
   exitCode?: number;
+  hasFuse?: boolean;
   largeStdout?: boolean;
   largeStderr?: boolean;
 }) {
@@ -147,6 +148,12 @@ function fakeSandbox(options?: {
   return {
     restoreBackup: vi.fn().mockResolvedValue(undefined),
     exec: vi.fn().mockImplementation((command: string) => {
+      if (command === 'test -c /dev/fuse') {
+        return Promise.resolve({
+          stdout: '',
+          exitCode: options?.hasFuse === false ? 1 : 0,
+        });
+      }
       if (command.includes('/tmp/ci-step.out')) {
         return Promise.resolve({ stdout: 'stdout tail' });
       }

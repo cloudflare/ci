@@ -38,23 +38,20 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
   async run(
     input: RunStepInput & { restore?: DirectoryBackup }
   ): Promise<RunStepResult<DirectoryBackup>> {
-    // In local dev (`wrangler dev`) the container has no /dev/fuse, so backups
-    // must use the localBucket path (unsquashfs, no FUSE). That path also needs
-    // the rpc transport: on http, restore base64-encodes the whole archive into
-    // a single writeFile request, which fails with 413 for large archives. rpc
-    // streams the archive instead. Toggled by LOCAL_DEV; unset in production.
-    const localBucket = Boolean(
-      (this.env as Bindings & { LOCAL_DEV?: unknown }).LOCAL_DEV
-    );
     // create the sandbox handle
     const sandbox = getSandbox(this.env.SANDBOX, createRunnerId(input.label), {
-      transport: localBucket ? 'rpc' : 'http',
+      transport: 'rpc',
       enableDefaultSession: false,
       containerTimeouts: { portReadyTimeoutMS: PORT_READY_TIMEOUT_MS },
     });
 
     let cleanupTransferredToStreams = false;
     try {
+      // Containers without FUSE must restore through the local R2 binding and
+      // unsquashfs. RPC streams those archives instead of base64-encoding them
+      // into a single request, which can exceed the local dev request limit.
+      const localBucket =
+        (await sandbox.exec('test -c /dev/fuse')).exitCode !== 0;
       if (input.restore) {
         await sandbox.restoreBackup(input.restore);
         // Overlay (no rm) so cached node_modules survive while tracked source
