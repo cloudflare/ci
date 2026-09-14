@@ -47,7 +47,14 @@ export function cloudflareArtifacts(
   );
 }
 
-function createAdapter<TProvider extends SourceControlProviderDefinition>(
+/**
+ * Creates a source-control adapter for any provider definition.
+ * Pass the provider definition as the type argument so the adapter id stays
+ * a string literal. Omitted owner or repository fields match any value.
+ */
+export function createAdapter<
+  TProvider extends SourceControlProviderDefinition,
+>(
   id: TProvider['id'],
   repository: SourceControlRepositoryFilter,
   create: (env: Bindings) => SourceControlProvider<TProvider>,
