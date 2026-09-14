@@ -40,13 +40,18 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
   ): Promise<RunStepResult<DirectoryBackup>> {
     // create the sandbox handle
     const sandbox = getSandbox(this.env.SANDBOX, createRunnerId(input.label), {
-      transport: 'http',
+      transport: 'rpc',
       enableDefaultSession: false,
       containerTimeouts: { portReadyTimeoutMS: PORT_READY_TIMEOUT_MS },
     });
 
     let cleanupTransferredToStreams = false;
     try {
+      // Containers without FUSE must restore through the local R2 binding and
+      // unsquashfs. RPC streams those archives instead of base64-encoding them
+      // into a single request, which can exceed the local dev request limit.
+      const localBucket =
+        (await sandbox.exec('test -c /dev/fuse')).exitCode !== 0;
       if (input.restore) {
         await sandbox.restoreBackup(input.restore);
         // Overlay (no rm) so cached node_modules survive while tracked source
@@ -95,6 +100,7 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
         name: input.label,
         multipart: true,
         ttl: input.ttlSeconds,
+        localBucket,
       });
       const rawLogs = await readLogs(sandbox);
       const streams = [rawLogs.stdout, rawLogs.stderr].filter(
