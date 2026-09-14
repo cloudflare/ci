@@ -144,21 +144,34 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
 
 async function readLogs(sandbox: ReturnType<typeof getSandbox>) {
   const listing = await sandbox.listFiles('/tmp');
-  const sizes = new Map(
-    listing.files.map((file) => [file.absolutePath, file.size])
+  const entries = new Map(
+    listing.files.map((file) => [file.absolutePath, file])
   );
   return {
-    stdout: await readLog(sandbox, STDOUT_FILE, sizes.get(STDOUT_FILE) ?? 0),
-    stderr: await readLog(sandbox, STDERR_FILE, sizes.get(STDERR_FILE) ?? 0),
+    stdout: await readLog(sandbox, STDOUT_FILE, entries.get(STDOUT_FILE)),
+    stderr: await readLog(sandbox, STDERR_FILE, entries.get(STDERR_FILE)),
   };
 }
 
+/**
+ * Reads a log inline only when the listing proves the read is bounded, and
+ * streams otherwise.
+ *
+ * The listing entry has to be present, describe a regular file, and be within the
+ * limit. A symlink is the case that makes this more than defensive: its reported
+ * size describes the link and not its target, so an eight-byte entry can point at
+ * a file of any size, and the step runs commands from the repository under test
+ * that can create one. A missing entry proves nothing at all. Treating either as
+ * small reads an unbounded file into the isolate and then into persisted step
+ * state.
+ */
 async function readLog(
   sandbox: ReturnType<typeof getSandbox>,
   file: string,
-  size: number
+  entry: { type: string; size: number } | undefined
 ): Promise<string | ReadableStream<Uint8Array>> {
-  if (size > INLINE_LOG_BYTES) {
+  const bounded = entry?.type === 'file' && entry.size <= INLINE_LOG_BYTES;
+  if (!bounded) {
     return sandbox.readFileStream(file);
   }
   return (await sandbox.readFile(file, { encoding: 'utf-8' })).content;

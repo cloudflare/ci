@@ -119,6 +119,38 @@ describe('SandboxRunner', () => {
     expect(sandbox.destroy).toHaveBeenCalledOnce();
   });
 
+  it('does not read a log inline when the listing reports a symlink', async () => {
+    // A symlink's size describes the link, so a small size is no evidence that
+    // reading it inline is bounded: the read follows it to whatever it targets.
+    const sandbox = fakeSandbox({ stdoutEntry: 'symlink' });
+    mocks.getSandbox.mockReturnValue(sandbox);
+
+    const result = await runner().run(input);
+
+    expect(result.logs.stdout).toBeInstanceOf(ReadableStream);
+    expect(sandbox.readFile).not.toHaveBeenCalledWith(
+      '/tmp/ci-step.out',
+      expect.anything()
+    );
+    // Streaming more often must not strand the sandbox.
+    expect(sandbox.destroy).not.toHaveBeenCalled();
+    await (result.logs.stdout as ReadableStream<Uint8Array>).cancel();
+    expect(sandbox.destroy).toHaveBeenCalledOnce();
+  });
+
+  it('does not read a log inline when the listing has no entry for it', async () => {
+    const sandbox = fakeSandbox({ stdoutEntry: 'missing' });
+    mocks.getSandbox.mockReturnValue(sandbox);
+
+    const result = await runner().run(input);
+
+    expect(result.logs.stdout).toBeInstanceOf(ReadableStream);
+    expect(sandbox.readFile).not.toHaveBeenCalledWith(
+      '/tmp/ci-step.out',
+      expect.anything()
+    );
+  });
+
   it('destroys the sandbox after both large streams finish', async () => {
     const sandbox = fakeSandbox({ largeStdout: true, largeStderr: true });
     mocks.getSandbox.mockReturnValue(sandbox);
@@ -139,6 +171,7 @@ function runner() {
 }
 
 function fakeSandbox(options?: {
+  stdoutEntry?: 'symlink' | 'missing';
   exitCode?: number;
   hasFuse?: boolean;
   largeStdout?: boolean;
@@ -172,12 +205,19 @@ function fakeSandbox(options?: {
       .mockResolvedValue({ id: 'backup-1', dir: '/workspace' }),
     listFiles: vi.fn().mockResolvedValue({
       files: [
-        {
-          absolutePath: '/tmp/ci-step.out',
-          size: options?.largeStdout ? 500_000 : 6,
-        },
+        ...(options?.stdoutEntry === 'missing'
+          ? []
+          : [
+              {
+                absolutePath: '/tmp/ci-step.out',
+                // A symlink's reported size describes the link, not its target.
+                type: options?.stdoutEntry === 'symlink' ? 'symlink' : 'file',
+                size: options?.largeStdout ? 500_000 : 6,
+              },
+            ]),
         {
           absolutePath: '/tmp/ci-step.err',
+          type: 'file',
           size: options?.largeStderr ? 500_000 : 6,
         },
       ],
