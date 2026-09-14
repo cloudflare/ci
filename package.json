@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "@cloudflare/ci",
   "description": "Cloudflare-native continuous integration powered by Workflows and Sandbox",
   "license": "Apache-2.0",
@@ -20,7 +20,14 @@
     "sandbox"
   ],
   "type": "module",
-  "files": ["src", "!src/**/*.test.ts", "README.md", "LICENSE", "NOTICE"],
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "exports": {
     ".": {
       "types": "./src/index.ts",
