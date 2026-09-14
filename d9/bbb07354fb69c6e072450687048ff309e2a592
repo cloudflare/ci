@@ -1,0 +1,19 @@
+src/ci/runners/sandbox.test.ts
+  s_4985fbd3f5be8e::t_253159c3836441 39,44-45,48,50,68,71,74,137-138,143,151-156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d9bbb07354fb69c6e072450687048ff309e2a592",
+  "prompts": {},
+  "sessions": {
+    "s_4985fbd3f5be8e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f5fd6b934ffesjEoOutWzVDEiP",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celso Martinho <celso@cloudflare.com>"
+    }
+  }
+}
