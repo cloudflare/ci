@@ -34,6 +34,28 @@ export function checkoutSourceScript(
   ].join(' && ');
 }
 
+/**
+ * Every credential a checkout carries, for the engine's redaction set. Exhaustive
+ * over the checkout kinds on purpose: a git checkout keeps its token out of the
+ * script and passes it by environment, while an archive checkout carries its
+ * credential inside the URL the script embeds, so a new kind must state which it
+ * is rather than defaulting to leaking.
+ */
+export function checkoutSensitiveValues(
+  source: SourceControlCheckout
+): string[] {
+  switch (source.kind) {
+    case 'git':
+      return [source.token];
+    case 'archive':
+      return [source.url];
+    default: {
+      const unreachable: never = source;
+      return unreachable;
+    }
+  }
+}
+
 export function checkoutSourceEnv(source: SourceControlCheckout) {
   return source.kind === 'git'
     ? { SOURCE_CONTROL_TOKEN: source.token }

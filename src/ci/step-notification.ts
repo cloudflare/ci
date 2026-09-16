@@ -74,7 +74,7 @@ export async function withStepNotification(
 
     return {
       exitCode: completed.exitCode,
-      logs: completed.logs,
+      logs: redactLogs(completed.logs, input.sensitiveValues),
       snapshot: completed.snapshot,
       cachePointer: completed.cachePointer,
     };
@@ -112,6 +112,26 @@ function redactPreview(
   return {
     stdout: redact(logs.stdout, sensitiveValues),
     stderr: redact(logs.stderr, sensitiveValues),
+  };
+}
+
+// The returned logs are persisted by Workflows as the step's state, so a secret
+// echoed to stdout outlives the run. Only the string branch can be redacted: a
+// stream would have to be buffered to rewrite it, and a buffered stream is the
+// thing the stream branch exists to avoid.
+function redactLogs(
+  logs: CiRunnerLogs,
+  sensitiveValues: string[]
+): CiRunnerLogs {
+  return {
+    stdout:
+      typeof logs.stdout === 'string'
+        ? redact(logs.stdout, sensitiveValues)
+        : logs.stdout,
+    stderr:
+      typeof logs.stderr === 'string'
+        ? redact(logs.stderr, sensitiveValues)
+        : logs.stderr,
   };
 }
 

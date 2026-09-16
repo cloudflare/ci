@@ -140,6 +140,40 @@ describe('withStepNotification', () => {
 
     consoleError.mockRestore();
   });
+
+  it('redacts the string logs it returns on success', async () => {
+    const handle = notificationHandle();
+    const execution = successfulExecution({
+      logs: { stdout: 'token=super-secret-value', stderr: '' },
+      preview: { stdout: 'token=super-secret-value', stderr: '' },
+    });
+
+    const output = await withStepNotification(
+      notificationInput(handle, ['super-secret-value']),
+      () => Promise.resolve(execution),
+      passthrough
+    );
+
+    expect(output.logs).toEqual({ stdout: 'token=[REDACTED]', stderr: '' });
+  });
+
+  it('leaves a streamed log untouched, since redacting one means buffering it', async () => {
+    const handle = notificationHandle();
+    const stdout = new ReadableStream<Uint8Array>();
+    const execution = successfulExecution({
+      logs: { stdout, stderr: 'token=super-secret-value' },
+      preview: { stdout: '', stderr: 'token=super-secret-value' },
+    });
+
+    const output = await withStepNotification(
+      notificationInput(handle, ['super-secret-value']),
+      () => Promise.resolve(execution),
+      passthrough
+    );
+
+    expect(output.logs.stdout).toBe(stdout);
+    expect(output.logs.stderr).toBe('token=[REDACTED]');
+  });
 });
 
 function passthrough(execution: CompletedStepExecution) {

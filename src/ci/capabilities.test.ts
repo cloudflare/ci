@@ -289,6 +289,59 @@ describe('runCiStep', () => {
       'super-secret-value'
     );
   });
+
+  it('redacts checkout credentials from failed command diagnostics', async () => {
+    mocks.run.mockResolvedValue({
+      exitCode: 1,
+      logs: { stdout: '', stderr: 'header=Bearer checkout-secret-value' },
+      preview: { stdout: '', stderr: 'header=Bearer checkout-secret-value' },
+    });
+    const { adapter, provider, fail } = sourceControl();
+    // The checkout carries its own credential, issued separately from the ones
+    // merged into the command environment.
+    provider.getSourceCheckout = vi.fn().mockResolvedValue({
+      kind: 'git',
+      remote: 'https://artifacts.example/repo.git',
+      token: 'checkout-secret-value',
+      sha: 'abc123',
+    });
+
+    const failure = await runCiStep(
+      fromPartial<Bindings>({}),
+      adapter,
+      input
+    ).catch((error) => error);
+
+    expect(failure.message).toContain('header=Bearer [REDACTED]');
+    expect(failure.message).not.toContain('checkout-secret-value');
+    expect(JSON.stringify(fail.mock.calls[0]![0])).not.toContain(
+      'checkout-secret-value'
+    );
+  });
+
+  it('redacts a credentialed archive URL from failed command diagnostics', async () => {
+    const url = 'https://example.com/source?signature=archive-secret-value';
+    mocks.run.mockResolvedValue({
+      exitCode: 1,
+      logs: { stdout: '', stderr: `curl failed for ${url}` },
+      preview: { stdout: '', stderr: `curl failed for ${url}` },
+    });
+    // An archive checkout carries its credential in the URL, which the checkout
+    // script embeds in the command itself.
+    const { adapter, fail } = sourceControl();
+
+    const failure = await runCiStep(
+      fromPartial<Bindings>({}),
+      adapter,
+      input
+    ).catch((error) => error);
+
+    expect(failure.message).toContain('curl failed for [REDACTED]');
+    expect(failure.message).not.toContain('archive-secret-value');
+    expect(JSON.stringify(fail.mock.calls[0]![0])).not.toContain(
+      'archive-secret-value'
+    );
+  });
 });
 
 function successfulRun(id: string) {
@@ -306,7 +359,7 @@ function sourceControl() {
   const provider = fromPartial<SourceControlProvider<CloudflareArtifacts>>({
     getSourceCheckout: vi.fn().mockResolvedValue({
       kind: 'archive',
-      url: 'https://example.com/source',
+      url: 'https://example.com/source?signature=archive-secret-value',
     }),
     listTreeBlobs: vi
       .fn()
