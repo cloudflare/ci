@@ -52,8 +52,11 @@ only provider notification previews and failure messages are redacted.
   install, check, and deploy pipeline.
 - [`examples/self-healing`](./examples/self-healing/) adds an application-owned
   Healing Agent that consumes the package's neutral runner-failure diagnostics.
+- [`examples/gocov-coverage`](./examples/gocov-coverage/) tests a Go repository
+  and uploads its test coverage to [gocov](https://gocov.dev), showing how a
+  step-scoped Worker secret feeds a third-party CLI.
 
-Both examples are self-contained deployable Workers. The Healing Agent, its
+All examples are self-contained deployable Workers. The Healing Agent, its
 tools, and its AI dependencies are not part of `@cloudflare/ci`.
 
 ## Develop
