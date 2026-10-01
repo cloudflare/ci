@@ -95,13 +95,15 @@ export class SandboxRunner implements Runner<DirectoryBackup> {
         return { exitCode, logs: preview, preview };
       }
 
-      const snapshot = await sandbox.createBackup({
-        dir: WORKSPACE_DIR,
-        name: input.label,
-        multipart: true,
-        ttl: input.ttlSeconds,
-        localBucket,
-      });
+      const snapshot = input.skipSnapshot
+        ? undefined
+        : await sandbox.createBackup({
+            dir: WORKSPACE_DIR,
+            name: input.label,
+            multipart: true,
+            ttl: input.ttlSeconds,
+            localBucket,
+          });
       const rawLogs = await readLogs(sandbox);
       const streams = [rawLogs.stdout, rawLogs.stderr].filter(
         (value): value is ReadableStream<Uint8Array> =>

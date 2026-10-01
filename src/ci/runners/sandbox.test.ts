@@ -77,6 +77,22 @@ describe('SandboxRunner', () => {
     );
   });
 
+  it('skips the workspace backup when the runner opts out', async () => {
+    const sandbox = fakeSandbox();
+    mocks.getSandbox.mockReturnValue(sandbox);
+
+    const result = await runner().run({ ...input, skipSnapshot: true });
+
+    expect(result).toEqual({
+      exitCode: 0,
+      logs: { stdout: 'stdout', stderr: 'stderr' },
+      preview: { stdout: 'stdout tail', stderr: 'stderr tail' },
+      snapshot: undefined,
+    });
+    expect(sandbox.createBackup).not.toHaveBeenCalled();
+    expect(sandbox.destroy).toHaveBeenCalledOnce();
+  });
+
   it('rejects a cwd outside the workspace', async () => {
     const sandbox = fakeSandbox();
     mocks.getSandbox.mockReturnValue(sandbox);

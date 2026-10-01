@@ -120,6 +120,9 @@ export type CiRunStepInput = {
   attempt?: number;
   snapshot?: DirectoryBackup;
   snapshotTtlSeconds?: number;
+  // Skip the workspace backup after a successful command. Set from
+  // `RunnerOptions.snapshot: false`.
+  skipSnapshot?: boolean;
   // Inject the Cloudflare deployment account and API token into the command
   // env. Scoped per step so build/test/lint commands never see them.
   cloudflareCredentials?: boolean | { accountId: string };
@@ -141,8 +144,8 @@ export type CiRunStepOutput = {
   // The workspace backup the sandbox writes after every successful runner. The
   // sandbox SDK stores it under a randomly generated id, so this handle is the
   // only way to find it again; the next chained runner restores from it.
-  // Always present.
-  snapshot: DirectoryBackup;
+  // Absent only when the runner opted out with `snapshot: false`.
+  snapshot?: DirectoryBackup;
   // Metadata for the deterministic cache pointer, present only when the runner
   // opted into caching. The pointer is a second-order indirection: a small R2
   // object at a content-addressed key that records `snapshot`'s random id, so a
@@ -160,6 +163,11 @@ export type RunnerOptions = {
   // node_modules/) onto a fresh checkout instead of reusing a full workspace.
   cache?: { inputs: string[] };
   config?: RunnerConfig;
+  // Set to false to skip the workspace backup after a successful command,
+  // for runners whose workspace is never restored (for example, a final
+  // deploy step). The result then cannot start a chained runner, and the
+  // option cannot be combined with `cache`.
+  snapshot?: false;
   cloudflareCredentials?: boolean | { accountId: string };
   // Inject provider-specific source-control credentials into the command env.
   sourceControlCredentials?: boolean;

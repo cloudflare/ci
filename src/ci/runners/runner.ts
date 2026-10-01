@@ -12,6 +12,8 @@ export type RunStepInput = {
   extraEnv?: Record<string, string>;
   // Snapshot TTL in seconds. Omitted falls back to the sandbox default (3 days).
   ttlSeconds?: number;
+  // Skip the workspace backup after a successful command.
+  skipSnapshot?: boolean;
 };
 
 export type RunOutput = {

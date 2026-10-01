@@ -21,9 +21,7 @@ export type StepExecution = {
   cacheHit: boolean;
 };
 
-export type CompletedStepExecution = StepExecution & {
-  snapshot: DirectoryBackup;
-};
+export type CompletedStepExecution = StepExecution;
 
 /**
  * Runs and finalizes a runner, then reports success or failure.
@@ -36,6 +34,8 @@ export async function withStepNotification(
     label: string;
     command: string;
     sensitiveValues: string[];
+    // False when the runner opted out of the workspace backup.
+    snapshotRequired?: boolean;
   },
   execute: () => Promise<StepExecution>,
   finalize: (
@@ -56,13 +56,10 @@ export async function withStepNotification(
         `${input.label} failed with exit code ${execution.exitCode}\n=== stdout ===\n${stdout}\n=== stderr ===\n${stderr}`
       );
     }
-    if (!execution.snapshot) {
+    if (!execution.snapshot && input.snapshotRequired !== false) {
       throw new Error(`${input.label} did not produce a workspace snapshot`);
     }
-    const completed = await finalize({
-      ...execution,
-      snapshot: execution.snapshot,
-    });
+    const completed = await finalize(execution);
     execution = completed;
 
     await input.handle?.succeed({

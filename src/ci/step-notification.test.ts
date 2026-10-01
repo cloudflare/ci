@@ -43,6 +43,25 @@ describe('withStepNotification', () => {
     expect(handle.fail).toHaveBeenCalledOnce();
   });
 
+  it('accepts a successful execution without a snapshot when none is required', async () => {
+    const handle = notificationHandle();
+
+    await expect(
+      withStepNotification(
+        { ...notificationInput(handle), snapshotRequired: false },
+        () => Promise.resolve(successfulExecution({ snapshot: undefined })),
+        passthrough
+      )
+    ).resolves.toEqual({
+      exitCode: 0,
+      logs: { stdout: 'ok', stderr: '' },
+      snapshot: undefined,
+      cachePointer: undefined,
+    });
+    expect(handle.succeed).toHaveBeenCalledOnce();
+    expect(handle.fail).not.toHaveBeenCalled();
+  });
+
   it('reports a rejected success notification as a step failure', async () => {
     const handle = notificationHandle();
     vi.mocked(handle.succeed).mockRejectedValue(new Error('completion failed'));

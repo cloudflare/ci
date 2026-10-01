@@ -113,6 +113,30 @@ describe('runCiStep', () => {
     expect(mocks.run).not.toHaveBeenCalled();
   });
 
+  it('skips the workspace snapshot when the runner opts out', async () => {
+    mocks.run.mockResolvedValue({
+      ...successfulRun('unused'),
+      snapshot: undefined,
+    });
+    const { adapter, succeed } = sourceControl();
+
+    const result = await runCiStep(fromPartial<Bindings>({}), adapter, {
+      ...input,
+      skipSnapshot: true,
+    });
+
+    expect(mocks.run).toHaveBeenCalledWith(
+      expect.objectContaining({ skipSnapshot: true })
+    );
+    expect(result).toEqual({
+      exitCode: 0,
+      logs: { stdout: 'ok', stderr: '' },
+      snapshot: undefined,
+      cachePointer: undefined,
+    });
+    expect(succeed).toHaveBeenCalledOnce();
+  });
+
   it('passes inherited lineage to the runner as a restore snapshot', async () => {
     mocks.run.mockResolvedValue(successfulRun('lineage-2'));
     const { adapter } = sourceControl();

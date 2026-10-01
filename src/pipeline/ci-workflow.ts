@@ -158,6 +158,7 @@ export abstract class CIWorkflow<
               cloudflareCredentials: options.cloudflareCredentials,
               sourceControlCredentials: options.sourceControlCredentials,
               cachePaths: options.cache?.inputs,
+              skipSnapshot: options.snapshot === false,
               env: options.env,
               secrets: options.secrets,
             })
@@ -166,7 +167,13 @@ export abstract class CIWorkflow<
             Object.freeze({
               ...output,
               runner: (nextOptions: RunnerOptions) =>
-                invoke(nextOptions, output.snapshot),
+                output.snapshot
+                  ? invoke(nextOptions, output.snapshot)
+                  : Promise.reject(
+                      new Error(
+                        `runner(${nextOptions.name}): ${options.name} ran with snapshot: false and cannot start a chained runner`
+                      )
+                    ),
             })
           );
       });
@@ -184,6 +191,11 @@ export abstract class CIWorkflow<
  * the margin), and validates all values are positive.
  */
 function resolveRunnerConfig(options: RunnerOptions): ResolvedRunnerConfig {
+  if (options.snapshot === false && options.cache) {
+    throw new Error(
+      `runner(${options.name}): snapshot: false cannot be combined with cache`
+    );
+  }
   const workflow = {
     // Constructing this explicitly keeps runner-only settings out of step.do.
     retries: options.config?.retries ?? DEFAULT_STEP_CONFIG.retries,

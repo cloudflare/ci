@@ -78,6 +78,7 @@ export async function runCiStep<
       label: input.label,
       command: input.command,
       sensitiveValues: Object.values(prepared.extraEnv),
+      snapshotRequired: input.skipSnapshot !== true,
     },
     () => executeStep(env, input, prepared),
     (execution) => finalizeStep(env, input, prepared, execution)
@@ -161,6 +162,7 @@ async function executeStep(
     source: prepared.checkout,
     ttlSeconds: input.snapshotTtlSeconds ?? DEFAULT_SNAPSHOT_TTL_SECONDS,
     extraEnv: prepared.extraEnv,
+    skipSnapshot: input.skipSnapshot,
   };
 
   const cache = prepared.cacheKey
@@ -212,6 +214,9 @@ async function finalizeStep(
 ): Promise<CompletedStepExecution> {
   if (!prepared.cacheKey || execution.cachePointer) {
     return execution;
+  }
+  if (!execution.snapshot) {
+    throw new Error(`${input.label} has no workspace snapshot to cache`);
   }
   // Write the small JSON pointer at the deterministic cache key. It records the
   // randomly generated id of the sandbox workspace backup so a future run can

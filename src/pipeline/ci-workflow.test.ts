@@ -127,6 +127,49 @@ class ChainedWhileSettlingWorkflow extends CIWorkflow<CloudflareArtifacts> {
   }
 }
 
+class SnapshotlessWorkflow extends CIWorkflow<CloudflareArtifacts> {
+  static override getProvider() {
+    return testProvider;
+  }
+
+  deployResult: CiRunnerResult | undefined;
+  chained: Promise<CiRunnerResult> | undefined;
+
+  protected async pipeline(
+    _event: WorkflowEvent<CiParams<CloudflareArtifacts>>,
+    _step: WorkflowStep,
+    ci: CiContext
+  ): Promise<void> {
+    const deploy = await ci.runner({
+      name: 'deploy',
+      command: 'run deploy',
+      snapshot: false,
+    });
+    this.deployResult = deploy;
+    this.chained = deploy.runner({ name: 'after', command: 'run after' });
+    await this.chained.catch(() => undefined);
+  }
+}
+
+class CachedSnapshotlessWorkflow extends CIWorkflow<CloudflareArtifacts> {
+  static override getProvider() {
+    return testProvider;
+  }
+
+  protected async pipeline(
+    _event: WorkflowEvent<CiParams<CloudflareArtifacts>>,
+    _step: WorkflowStep,
+    ci: CiContext
+  ): Promise<void> {
+    await ci.runner({
+      name: 'install',
+      command: 'bun install',
+      cache: { inputs: ['bun.lock'] },
+      snapshot: false,
+    });
+  }
+}
+
 class ConfigurableWorkflow extends CIWorkflow<CloudflareArtifacts> {
   static override getProvider() {
     return testProvider;
@@ -311,6 +354,43 @@ describe('CIWorkflow ci.runner', () => {
         snapshot: { id: 'lineage-first', dir: '/workspace' },
       })
     );
+  });
+
+  it('skips the snapshot for opted-out runners and refuses to chain from them', async () => {
+    mocks.runCiStep.mockResolvedValue({
+      exitCode: 0,
+      logs: { stdout: '', stderr: '' },
+    });
+    const workflow = new SnapshotlessWorkflow(
+      fromPartial<ExecutionContext>({}),
+      fromPartial<Bindings>({})
+    );
+
+    await workflow.run(event, immediateWorkflowStep());
+
+    expect(mocks.runCiStep).toHaveBeenCalledOnce();
+    expect(mocks.runCiStep).toHaveBeenCalledWith(
+      expect.anything(),
+      SnapshotlessWorkflow.getProvider(),
+      expect.objectContaining({ label: 'deploy', skipSnapshot: true })
+    );
+    expect(workflow.deployResult).not.toHaveProperty('snapshot');
+    await expect(workflow.chained).rejects.toThrow(
+      'runner(after): deploy ran with snapshot: false and cannot start a chained runner'
+    );
+  });
+
+  it('rejects snapshot: false combined with cache', async () => {
+    const workflow = new CachedSnapshotlessWorkflow(
+      fromPartial<ExecutionContext>({}),
+      fromPartial<Bindings>({})
+    );
+    const step = immediateWorkflowStep();
+
+    await expect(workflow.run(event, step)).rejects.toThrow(
+      'runner(install): snapshot: false cannot be combined with cache'
+    );
+    expect(step.do).not.toHaveBeenCalled();
   });
 
   it('does not start downstream runners after a failed command', async () => {
