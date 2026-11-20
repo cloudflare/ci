@@ -45,7 +45,7 @@ function globToRegExp(glob: string): RegExp {
     } else if (char === '*') {
       pattern += '[^/]*';
     } else {
-      pattern += char.replaceAll(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+      pattern += char.replaceAll(/[\\^$.*+?()[\]{}|]/g, String.raw`\$&`);
     }
   }
   return new RegExp(`${pattern}$`);
