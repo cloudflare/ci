@@ -35,7 +35,5 @@ export default defineConfig({
     ...cloudflare.rules,
     'no-await-in-loop': 'warn',
     'vitest/require-mock-type-parameters': 'off',
-    // Temporarily disabled during migration.
-    'typescript/no-unsafe-type-assertion': 'off',
   },
 });

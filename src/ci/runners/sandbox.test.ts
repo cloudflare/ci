@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { assert, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fromPartial } from '@total-typescript/shoehorn';
 import type { Bindings } from '../../env';
 import type { RunStepInput } from './runner';
@@ -109,13 +109,11 @@ describe('SandboxRunner', () => {
 
     const result = await runner().run(input);
 
-    expect(result.logs.stdout).toBeInstanceOf(ReadableStream);
+    const { stdout } = result.logs;
+    expect(stdout).toBeInstanceOf(ReadableStream);
+    assert(typeof stdout !== 'string');
     expect(sandbox.destroy).not.toHaveBeenCalled();
-    expect(
-      await new Response(
-        result.logs.stdout as ReadableStream<Uint8Array>
-      ).text()
-    ).toBe('streamed stdout');
+    expect(await new Response(stdout).text()).toBe('streamed stdout');
     expect(sandbox.destroy).toHaveBeenCalledOnce();
   });
 
@@ -124,8 +122,9 @@ describe('SandboxRunner', () => {
     mocks.getSandbox.mockReturnValue(sandbox);
 
     const result = await runner().run(input);
-    const stdout = result.logs.stdout as ReadableStream<Uint8Array>;
-    const stderr = result.logs.stderr as ReadableStream<Uint8Array>;
+    const { stdout, stderr } = result.logs;
+    assert(typeof stdout !== 'string');
+    assert(typeof stderr !== 'string');
 
     await new Response(stdout).text();
     expect(sandbox.destroy).not.toHaveBeenCalled();

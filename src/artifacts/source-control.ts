@@ -89,6 +89,8 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
   ): Promise<Array<SourceControlTreeBlob> | null> {
     const namespace = this.assertNamespace(source);
     const repo = await this.getRepo(namespace, source.repo);
+    // The runtime reader methods are missing from the published binding type.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const reader = repo as typeof repo & ArtifactsRepoReader;
     try {
       const commit = await reader.readCommit(source.sha);

@@ -61,7 +61,11 @@ export abstract class CIWorkflow<
   }
 
   private provider(): SourceControlAdapter<TProvider> {
+    // Static methods cannot refer to the provider type parameter of the subclass.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const constructor = this.constructor as typeof CIWorkflow;
+    // Subclasses select their adapter through the static getProvider method.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return constructor.getProvider() as SourceControlAdapter<TProvider>;
   }
 
@@ -97,7 +101,7 @@ export abstract class CIWorkflow<
     if ('provider' in payload) {
       // The provider field identifies normalized payloads, but TypeScript cannot
       // narrow the generic conditional payload type here.
-      // oxlint-disable-next-line quality/no-chained-type-assertions
+      // oxlint-disable-next-line quality/no-chained-type-assertions, typescript/no-unsafe-type-assertion
       return payload as unknown as CiParams<TProvider>;
     }
     const event = await adapter.create(this.env).receiveEvent({

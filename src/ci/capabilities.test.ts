@@ -111,6 +111,8 @@ describe('runCiStep', () => {
     await expect(
       runCiStep(fromPartial<Bindings>({}), adapter, {
         ...input,
+        // Exercise runtime validation with deliberately invalid input.
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         cloudflareCredentials: 'invalid' as never,
       })
     ).rejects.toThrow(
