@@ -33,7 +33,7 @@ type ArtifactsTreeEntry = {
 type ArtifactsCommit = { treeHash: string };
 type ArtifactsRepoReader = {
   readCommit(hash: string): Promise<ArtifactsCommit | null>;
-  readTree(hash: string): Promise<ArtifactsTreeEntry[] | null>;
+  readTree(hash: string): Promise<Array<ArtifactsTreeEntry> | null>;
 };
 
 export class CloudflareArtifactsSourceControlProvider extends SourceControlProvider<CloudflareArtifacts> {
@@ -83,8 +83,8 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
    */
   async listTreeBlobs(
     source: SourceControlSource,
-    paths: string[]
-  ): Promise<SourceControlTreeBlob[] | null> {
+    paths: Array<string>
+  ): Promise<Array<SourceControlTreeBlob> | null> {
     const namespace = this.assertNamespace(source);
     const repo = (await this.getRepo(
       namespace,
@@ -108,14 +108,14 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
     repo: ArtifactsRepoReader,
     treeHash: string,
     prefix: string
-  ): Promise<SourceControlTreeBlob[]> {
+  ): Promise<Array<SourceControlTreeBlob>> {
     const entries = await repo.readTree(treeHash);
     if (!entries) {
       throw new Error(
         `Artifacts tree not found: ${treeHash} at ${prefix || '/'}`
       );
     }
-    const blobs: SourceControlTreeBlob[] = [];
+    const blobs: Array<SourceControlTreeBlob> = [];
     for (const entry of entries) {
       const path = prefix ? `${prefix}/${entry.name}` : entry.name;
       if (entry.type === 'tree') {

@@ -128,11 +128,11 @@ export type CiRunStepInput = {
   // When set, the step's snapshot is cached and keyed by the git blob SHAs of
   // these paths (globs allowed). An unchanged key restores the prior snapshot
   // and overlays current source instead of running the command.
-  cachePaths?: string[];
+  cachePaths?: Array<string>;
   // Literal env injected into the command. Set by the pipeline.
   env?: Record<string, string>;
   // Names of Worker secrets/vars resolved and injected into the command.
-  secrets?: string[];
+  secrets?: Array<string>;
 };
 
 export type CiRunStepOutput = {
@@ -158,13 +158,13 @@ export type RunnerOptions = {
   env?: Record<string, string>;
   // TODO: Add `outputs` so cache hits restore only declared paths (for example,
   // node_modules/) onto a fresh checkout instead of reusing a full workspace.
-  cache?: { inputs: string[] };
+  cache?: { inputs: Array<string> };
   config?: RunnerConfig;
   cloudflareCredentials?: boolean | { accountId: string };
   // Inject provider-specific source-control credentials into the command env.
   sourceControlCredentials?: boolean;
   // Names of Worker secrets/vars resolved and injected into the command.
-  secrets?: string[];
+  secrets?: Array<string>;
 };
 
 // Metadata for a deterministic cache pointer written when a runner opts into

@@ -155,7 +155,7 @@ function notificationHandle(): StepNotificationHandle {
 
 function notificationInput(
   handle: StepNotificationHandle,
-  sensitiveValues: string[] = []
+  sensitiveValues: Array<string> = []
 ) {
   return {
     handle,

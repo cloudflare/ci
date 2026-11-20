@@ -22,9 +22,9 @@ export type SourceControlSource = {
 export type SourceControlTreeBlob = { path: string; sha: string };
 
 export function matchSourceControlTreeBlobs(
-  tree: SourceControlTreeBlob[],
-  patterns: string[]
-): SourceControlTreeBlob[] {
+  tree: Array<SourceControlTreeBlob>,
+  patterns: Array<string>
+): Array<SourceControlTreeBlob> {
   const regexps = patterns.map(globToRegExp);
   return tree.filter((entry) => regexps.some((re) => re.test(entry.path)));
 }
@@ -150,8 +150,8 @@ export abstract class SourceControlProvider<
    */
   abstract listTreeBlobs(
     source: SourceControlSource,
-    paths: string[]
-  ): Promise<SourceControlTreeBlob[] | null>;
+    paths: Array<string>
+  ): Promise<Array<SourceControlTreeBlob> | null>;
 
   /** Returns provider credentials explicitly requested by a runner. */
   abstract getStepCredentialEnv(

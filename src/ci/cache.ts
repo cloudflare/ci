@@ -33,8 +33,8 @@ export type CacheKeyInput = {
   command: string;
   cwd?: string;
   env?: Record<string, string>;
-  paths: string[];
-  blobs: SourceControlTreeBlob[];
+  paths: Array<string>;
+  blobs: Array<SourceControlTreeBlob>;
 };
 
 // A cache hit yields two distinct things: `snapshot`, the handle to the actual

@@ -35,7 +35,7 @@ export async function withStepNotification(
     handle: StepNotificationHandle | null;
     label: string;
     command: string;
-    sensitiveValues: string[];
+    sensitiveValues: Array<string>;
   },
   execute: () => Promise<StepExecution>,
   finalize: (
@@ -107,7 +107,7 @@ export async function withStepNotification(
 // truncation, markdown) is the provider's job.
 function redactPreview(
   logs: { stdout: string; stderr: string },
-  sensitiveValues: string[] = []
+  sensitiveValues: Array<string> = []
 ) {
   return {
     stdout: redact(logs.stdout, sensitiveValues),
@@ -115,7 +115,7 @@ function redactPreview(
   };
 }
 
-function sanitizeError(error: unknown, sensitiveValues: string[]) {
+function sanitizeError(error: unknown, sensitiveValues: Array<string>) {
   const message = redact(
     error instanceof Error ? error.message : String(error),
     sensitiveValues
@@ -125,7 +125,7 @@ function sanitizeError(error: unknown, sensitiveValues: string[]) {
   return safe;
 }
 
-function redact(value: string, sensitiveValues: string[]) {
+function redact(value: string, sensitiveValues: Array<string>) {
   let redacted = value;
   const values = [...new Set(sensitiveValues.filter(Boolean))].sort(
     (left, right) => right.length - left.length

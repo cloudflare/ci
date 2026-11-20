@@ -9,7 +9,7 @@ export type CiObservedRunnerFailure = {
 };
 
 export type CiRunnerFailureDiagnostics = {
-  failures: CiObservedRunnerFailure[];
+  failures: Array<CiObservedRunnerFailure>;
   runners: Array<Pick<RunnerOptions, 'name' | 'command' | 'cwd'>>;
 };
 

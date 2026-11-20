@@ -13,8 +13,8 @@ type RunnerInvocation = Pick<RunnerOptions, 'name' | 'command' | 'cwd'>;
  */
 export class RunnerGroup {
   private readonly active = new Set<Promise<CiRunnerResult>>();
-  private readonly failures: CiRunnerFailure[] = [];
-  private readonly invocations: RunnerInvocation[] = [];
+  private readonly failures: Array<CiRunnerFailure> = [];
+  private readonly invocations: Array<RunnerInvocation> = [];
   private nextOrder = 0;
 
   run(
