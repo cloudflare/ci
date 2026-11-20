@@ -105,7 +105,7 @@ async function prepareStep(
     source,
     input
   );
-  const extraEnv: Record<string, string> = { ...input.env };
+  const extraEnv: PreparedStep['extraEnv'] = { ...input.env };
   if (
     input.cloudflareCredentials !== undefined &&
     input.cloudflareCredentials !== false
