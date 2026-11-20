@@ -30,6 +30,5 @@ export default defineConfig({
     'typescript/no-unsafe-return': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
     'typescript/use-unknown-in-catch-callback-variable': 'off',
-    'unicorn/text-encoding-identifier-case': 'off',
   },
 });

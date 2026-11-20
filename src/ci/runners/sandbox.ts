@@ -161,7 +161,7 @@ async function readLog(
   if (size > INLINE_LOG_BYTES) {
     return sandbox.readFileStream(file);
   }
-  return (await sandbox.readFile(file, { encoding: 'utf-8' })).content;
+  return (await sandbox.readFile(file, { encoding: 'utf8' })).content;
 }
 
 async function readPreviews(sandbox: ReturnType<typeof getSandbox>) {
