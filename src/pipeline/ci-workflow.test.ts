@@ -202,10 +202,10 @@ describe('CIWorkflow ci.runner', () => {
     const workflow = new TestWorkflow(fromPartial<ExecutionContext>({}), env);
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
@@ -287,10 +287,10 @@ describe('CIWorkflow ci.runner', () => {
     );
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
@@ -321,10 +321,10 @@ describe('CIWorkflow ci.runner', () => {
     );
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
@@ -584,10 +584,10 @@ describe('CIWorkflow ci.runner', () => {
 function immediateWorkflowStep() {
   return fromPartial<WorkflowStep>({
     do: vi.fn(
-      async (
+      async <T>(
         _label: string,
         _config: unknown,
-        callback: (context: { attempt: number }) => Promise<unknown>
+        callback: (context: { attempt: number }) => Promise<T>
       ) => callback({ attempt: 1 })
     ),
   });
