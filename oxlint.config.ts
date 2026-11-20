@@ -25,6 +25,11 @@ export default defineConfig({
       ],
       rules: { 'no-console': 'off' },
     },
+    {
+      // Configured secret names can vary per deployment. They are narrowed at each read.
+      files: ['src/env.ts'],
+      rules: { 'quality/no-unsafe-dictionary-type': 'off' },
+    },
   ],
   rules: {
     ...cloudflare.rules,
@@ -32,7 +37,6 @@ export default defineConfig({
     'vitest/require-mock-type-parameters': 'off',
     // Temporarily disabled during migration.
     'quality/no-chained-type-assertions': 'off',
-    'quality/no-unsafe-dictionary-type': 'off',
     'typescript/no-unsafe-return': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
     'typescript/use-unknown-in-catch-callback-variable': 'off',
