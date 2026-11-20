@@ -25,7 +25,6 @@ export default defineConfig({
     'quality/no-known-value-widening': 'off',
     'quality/no-unknown-returns': 'off',
     'quality/no-unsafe-dictionary-type': 'off',
-    'typescript/consistent-type-imports': 'off',
     'typescript/no-unsafe-return': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
     'typescript/use-unknown-in-catch-callback-variable': 'off',
