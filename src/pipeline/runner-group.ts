@@ -71,9 +71,12 @@ export class RunnerGroup {
 }
 
 function runnerInvocation(options: RunnerOptions): RunnerInvocation {
-  return {
+  const invocation: RunnerInvocation = {
     name: options.name,
     command: options.command,
-    ...(options.cwd === undefined ? {} : { cwd: options.cwd }),
   };
+  if (options.cwd !== undefined) {
+    invocation.cwd = options.cwd;
+  }
+  return invocation;
 }
