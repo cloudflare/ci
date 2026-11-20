@@ -35,7 +35,6 @@ export default defineConfig({
     'unicorn/no-useless-spread': 'off',
     'unicorn/numeric-separators-style': 'off',
     'unicorn/prefer-string-raw': 'off',
-    'unicorn/prefer-string-replace-all': 'off',
     'unicorn/text-encoding-identifier-case': 'off',
   },
 });
