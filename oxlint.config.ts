@@ -37,7 +37,6 @@ export default defineConfig({
     'vitest/require-mock-type-parameters': 'off',
     // Temporarily disabled during migration.
     'quality/no-chained-type-assertions': 'off',
-    'typescript/no-unsafe-return': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
   },
 });
