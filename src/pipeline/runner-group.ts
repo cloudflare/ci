@@ -26,9 +26,9 @@ export class RunnerGroup {
     const order = this.nextOrder++;
     this.invocations.push(runner);
 
-    const execution = execute().catch((cause: unknown) => {
+    const execution = execute().catch((error: unknown) => {
       const failure = new CiRunnerFailure({
-        cause,
+        cause: error,
         order,
         runner,
         snapshot: inherited,
@@ -44,9 +44,7 @@ export class RunnerGroup {
     // Unlike finally(), handling both outcomes consumes the rejection instead
     // of creating an ignored rejected promise. `void` marks cleanup as detached.
     void execution.then(remove, remove);
-    return execution.catch((requestedFailure: CiRunnerFailure) =>
-      this.settle(requestedFailure)
-    );
+    return execution.catch((error: CiRunnerFailure) => this.settle(error));
   }
 
   private async settle(requestedFailure: CiRunnerFailure): Promise<never> {
