@@ -95,6 +95,9 @@ export abstract class CIWorkflow<
     adapter: SourceControlAdapter<TProvider>
   ): Promise<CiParams<TProvider> | null> {
     if ('provider' in payload) {
+      // The provider field identifies normalized payloads, but TypeScript cannot
+      // narrow the generic conditional payload type here.
+      // oxlint-disable-next-line quality/no-chained-type-assertions
       return payload as unknown as CiParams<TProvider>;
     }
     const event = await adapter.create(this.env).receiveEvent({

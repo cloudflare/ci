@@ -36,7 +36,6 @@ export default defineConfig({
     'no-await-in-loop': 'warn',
     'vitest/require-mock-type-parameters': 'off',
     // Temporarily disabled during migration.
-    'quality/no-chained-type-assertions': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
   },
 });

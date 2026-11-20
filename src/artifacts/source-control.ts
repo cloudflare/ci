@@ -88,16 +88,14 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
     paths: Array<string>
   ): Promise<Array<SourceControlTreeBlob> | null> {
     const namespace = this.assertNamespace(source);
-    const repo = (await this.getRepo(
-      namespace,
-      source.repo
-    )) as unknown as ArtifactsRepoReader;
+    const repo = await this.getRepo(namespace, source.repo);
+    const reader = repo as typeof repo & ArtifactsRepoReader;
     try {
-      const commit = await repo.readCommit(source.sha);
+      const commit = await reader.readCommit(source.sha);
       if (!commit) {
         throw new Error(`Artifacts commit not found: ${source.sha}`);
       }
-      const tree = await this.walkTree(repo, commit.treeHash, '');
+      const tree = await this.walkTree(reader, commit.treeHash, '');
       return matchSourceControlTreeBlobs(tree, paths);
     } catch {
       return null;
