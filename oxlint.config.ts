@@ -13,13 +13,25 @@ export default defineConfig({
     '**/dist/**',
     '**/.wrangler/**',
   ],
+  overrides: [
+    ...cloudflare.overrides,
+    {
+      // These Worker paths emit cache, runner, and notification diagnostics.
+      files: [
+        'src/ci/cache.ts',
+        'src/ci/capabilities.ts',
+        'src/ci/runners/sandbox.ts',
+        'src/ci/step-notification.ts',
+      ],
+      rules: { 'no-console': 'off' },
+    },
+  ],
   rules: {
     ...cloudflare.rules,
     'no-await-in-loop': 'warn',
     'vitest/require-mock-type-parameters': 'off',
     // Temporarily disabled during migration.
     '@nkzw/no-instanceof': 'off',
-    'no-console': 'off',
     'quality/no-chained-type-assertions': 'off',
     'quality/no-unsafe-dictionary-type': 'off',
     'typescript/no-unsafe-return': 'off',
