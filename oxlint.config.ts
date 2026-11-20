@@ -39,6 +39,5 @@ export default defineConfig({
     'quality/no-chained-type-assertions': 'off',
     'typescript/no-unsafe-return': 'off',
     'typescript/no-unsafe-type-assertion': 'off',
-    'typescript/use-unknown-in-catch-callback-variable': 'off',
   },
 });

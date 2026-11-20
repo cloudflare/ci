@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { assert, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { fromPartial } from '@total-typescript/shoehorn';
 import type {
@@ -28,7 +28,7 @@ vi.mock('cloudflare:workers', () => ({
 }));
 
 import { CIWorkflow } from './ci-workflow';
-import { CiRunnerFailure } from './failures';
+import { isCiRunnerFailure } from './failures';
 
 const testProvider = cloudflareArtifacts({
   owner: 'cloudflare',
@@ -329,9 +329,11 @@ describe('CIWorkflow ci.runner', () => {
       ),
     });
 
-    const failure = await workflow.run(event, step).catch((error) => error);
+    const failure = await workflow
+      .run(event, step)
+      .catch((error: unknown) => error);
 
-    expect(failure).toBeInstanceOf(CiRunnerFailure);
+    assert(isCiRunnerFailure(failure));
     expect(failure).toMatchObject({
       output: 'install failed',
       runner: {
@@ -377,7 +379,7 @@ describe('CIWorkflow ci.runner', () => {
 
     second.reject(new Error('second failed first'));
     first.reject(new Error('first failed second'));
-    const failure = await running.catch((error) => error);
+    const failure = await running.catch((error: unknown) => error);
 
     expect(failure).toMatchObject({
       runner: { name: 'first', command: 'run first' },
@@ -419,7 +421,7 @@ describe('CIWorkflow ci.runner', () => {
     await vi.waitFor(() => expect(mocks.runCiStep).toHaveBeenCalledTimes(2));
 
     first.resolve(successfulStep('first'));
-    const failure = await running.catch((error) => error);
+    const failure = await running.catch((error: unknown) => error);
 
     expect(mocks.runCiStep).toHaveBeenCalledTimes(3);
     expect(failure).toMatchObject({

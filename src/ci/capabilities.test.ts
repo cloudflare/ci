@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach,
+  assert,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 import { fromPartial } from '@total-typescript/shoehorn';
 import type { Bindings } from '../env';
 import type { CiRunStepInput, CloudflareArtifacts } from '../pipeline';
@@ -279,8 +287,9 @@ describe('runCiStep', () => {
     const failure = await runCiStep(fromPartial<Bindings>({}), adapter, {
       ...input,
       env: { API_TOKEN: 'super-secret-value' },
-    }).catch((error) => error);
+    }).catch((error: unknown) => error);
 
+    assert(failure instanceof Error);
     expect(failure.message).toContain('token=[REDACTED]');
     expect(failure.message).not.toContain('super-secret-value');
     expect(JSON.stringify(fail.mock.calls[0][0])).not.toContain(

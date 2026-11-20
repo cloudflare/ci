@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { CiRunnerFailure } from './failures';
+import { CiRunnerFailure, isCiRunnerFailure } from './failures';
 import type { CiRunnerResult, DirectoryBackup, RunnerOptions } from './types';
 
 type RunnerInvocation = Pick<RunnerOptions, 'name' | 'command' | 'cwd'>;
@@ -44,7 +44,12 @@ export class RunnerGroup {
     // Unlike finally(), handling both outcomes consumes the rejection instead
     // of creating an ignored rejected promise. `void` marks cleanup as detached.
     void execution.then(remove, remove);
-    return execution.catch((error: CiRunnerFailure) => this.settle(error));
+    return execution.catch((error: unknown) => {
+      if (!isCiRunnerFailure(error)) {
+        throw error;
+      }
+      return this.settle(error);
+    });
   }
 
   private async settle(requestedFailure: CiRunnerFailure): Promise<never> {
