@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { StepNotificationHandle } from '../source-control';
-import {
-  withStepNotification,
-  type CompletedStepExecution,
-  type StepExecution,
+import { withStepNotification } from './step-notification';
+import type {
+  CompletedStepExecution,
+  StepExecution,
 } from './step-notification';
 
 describe('withStepNotification', () => {

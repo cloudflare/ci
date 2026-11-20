@@ -1,11 +1,8 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-  WorkflowEntrypoint,
-  type WorkflowEvent,
-  type WorkflowStep,
-} from 'cloudflare:workers';
+import { WorkflowEntrypoint } from 'cloudflare:workers';
+import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import type {
   CiContext,
   CiParams,
@@ -18,10 +15,8 @@ import type {
   SourceControlProviderDefinition,
   StepConfig,
 } from './types';
-import {
-  cloudflareArtifacts,
-  type SourceControlAdapter,
-} from '../source-control-adapter';
+import { cloudflareArtifacts } from '../source-control-adapter';
+import type { SourceControlAdapter } from '../source-control-adapter';
 import type { Bindings } from '../env';
 import { runCiStep } from '../ci/capabilities';
 import { RunnerGroup } from './runner-group';

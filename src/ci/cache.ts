@@ -4,10 +4,8 @@
 import { z } from 'zod';
 import type { Bindings } from '../env';
 import type { CacheSnapshotPointer, DirectoryBackup } from '../pipeline';
-import {
-  matchSourceControlTreeBlobs,
-  type SourceControlTreeBlob,
-} from '../source-control';
+import { matchSourceControlTreeBlobs } from '../source-control';
+import type { SourceControlTreeBlob } from '../source-control';
 
 // Pointer to a previously captured snapshot, stored in BACKUP_BUCKET under
 // `cache/<key>.json`. Reused when the cache key's inputs are unchanged.

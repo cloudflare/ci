@@ -19,7 +19,6 @@ export default defineConfig({
     'vitest/require-mock-type-parameters': 'off',
     // Temporarily disabled during migration.
     '@nkzw/no-instanceof': 'off',
-    'import/consistent-type-specifier-style': 'off',
     'no-console': 'off',
     'quality/no-chained-type-assertions': 'off',
     'quality/no-conditional-empty-object-spread': 'off',

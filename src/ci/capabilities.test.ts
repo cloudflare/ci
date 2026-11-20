@@ -3,10 +3,8 @@ import { fromPartial } from '@total-typescript/shoehorn';
 import type { Bindings } from '../env';
 import type { CiRunStepInput, CloudflareArtifacts } from '../pipeline';
 import type { SourceControlProvider } from '../source-control';
-import {
-  cloudflareArtifacts,
-  type SourceControlAdapter,
-} from '../source-control-adapter';
+import { cloudflareArtifacts } from '../source-control-adapter';
+import type { SourceControlAdapter } from '../source-control-adapter';
 
 const mocks = vi.hoisted(() => ({
   lookupSnapshotCache: vi.fn(),

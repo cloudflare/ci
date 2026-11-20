@@ -6,8 +6,8 @@ import {
   lookupSnapshotCache,
   publishSnapshotCache,
   resolveCacheKey,
-  type CacheKeyInput,
 } from './cache';
+import type { CacheKeyInput } from './cache';
 
 describe('resolveCacheKey', () => {
   it.each([

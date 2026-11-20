@@ -7,11 +7,13 @@ import type { Bindings } from '../env';
 import {
   matchSourceControlTreeBlobs,
   SourceControlProvider,
-  type SourceControlEvent,
-  type SourceControlEventInput,
-  type SourceControlSource,
 } from '../source-control';
-import type { SourceControlTreeBlob } from '../source-control';
+import type {
+  SourceControlEvent,
+  SourceControlEventInput,
+  SourceControlSource,
+  SourceControlTreeBlob,
+} from '../source-control';
 import {
   mapArtifactsPushEventToCiParams,
   parseArtifactsPushEvent,
