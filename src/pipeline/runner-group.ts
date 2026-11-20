@@ -51,7 +51,7 @@ export class RunnerGroup {
     while (this.active.size > 0) {
       // Runners can chain another runner while the current active set settles.
       // eslint-disable-next-line no-await-in-loop
-      await Promise.allSettled([...this.active]);
+      await Promise.allSettled(this.active);
     }
 
     const failure = this.failures.reduce(
