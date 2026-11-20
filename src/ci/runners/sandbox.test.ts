@@ -68,7 +68,7 @@ describe('SandboxRunner', () => {
     expect(sandbox.exec).toHaveBeenNthCalledWith(1, 'test -c /dev/fuse');
     expect(sandbox.restoreBackup).toHaveBeenCalledWith(restore);
     expect(sandbox.restoreBackup.mock.invocationCallOrder[0]).toBeLessThan(
-      sandbox.exec.mock.invocationCallOrder[1]!
+      sandbox.exec.mock.invocationCallOrder[1]
     );
     expect(sandbox.exec).toHaveBeenNthCalledWith(
       2,

@@ -285,7 +285,7 @@ describe('runCiStep', () => {
 
     expect(failure.message).toContain('token=[REDACTED]');
     expect(failure.message).not.toContain('super-secret-value');
-    expect(JSON.stringify(fail.mock.calls[0]![0])).not.toContain(
+    expect(JSON.stringify(fail.mock.calls[0][0])).not.toContain(
       'super-secret-value'
     );
   });
