@@ -62,7 +62,7 @@ class TestWorkflow extends CIWorkflow<CloudflareArtifacts> {
       cwd: 'apps/example',
       env: { NODE_ENV: 'production' },
       config: {
-        retries: { limit: 1, delay: 1_000 },
+        retries: { limit: 1, delay: 1000 },
         timeout: 300_000,
         commandTimeoutMs: 240_000,
         snapshotRetentionSeconds: 7 * 24 * 60 * 60,
@@ -253,7 +253,7 @@ describe('CIWorkflow ci.runner', () => {
       2,
       'build',
       {
-        retries: { limit: 1, delay: 1_000 },
+        retries: { limit: 1, delay: 1000 },
         timeout: 300_000,
       },
       expect.any(Function)
