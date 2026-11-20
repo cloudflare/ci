@@ -9,7 +9,7 @@ export type CiObservedRunnerFailure = {
 };
 
 export type CiRunnerFailureDiagnostics = {
-  failures: CiObservedRunnerFailure[];
+  failures: Array<CiObservedRunnerFailure>;
   runners: Array<Pick<RunnerOptions, 'name' | 'command' | 'cwd'>>;
 };
 
@@ -52,5 +52,7 @@ export class CiRunnerFailure extends Error {
 }
 
 export function isCiRunnerFailure(value: unknown): value is CiRunnerFailure {
+  // The runner group uses the class identity to distinguish its own failures.
+  // oxlint-disable-next-line @nkzw/no-instanceof
   return value instanceof CiRunnerFailure;
 }

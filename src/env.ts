@@ -1,6 +1,9 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
+import type { CiSandbox } from './ci/sandbox';
+import type { CiParams, CloudflareArtifacts } from './pipeline/types';
+
 export type CheckRunRef = {
   installationId: number;
   owner: string;
@@ -22,12 +25,8 @@ export type Bindings = Secrets & {
   BACKUP_BUCKET: R2Bucket;
   BACKUP_BUCKET_NAME: string;
   CLOUDFLARE_ACCOUNT_ID: string;
-  SANDBOX: DurableObjectNamespace<import('./ci/sandbox').CiSandbox>;
-  CI_WORKFLOW: Workflow<
-    import('./pipeline/types').CiParams<
-      import('./pipeline/types').CloudflareArtifacts
-    >
-  >;
+  SANDBOX: DurableObjectNamespace<CiSandbox>;
+  CI_WORKFLOW: Workflow<CiParams<CloudflareArtifacts>>;
 };
 
 export type Variables = Record<string, never>;

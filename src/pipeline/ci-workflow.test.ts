@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { assert, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import { fromPartial } from '@total-typescript/shoehorn';
 import type {
@@ -28,7 +28,7 @@ vi.mock('cloudflare:workers', () => ({
 }));
 
 import { CIWorkflow } from './ci-workflow';
-import { CiRunnerFailure } from './failures';
+import { isCiRunnerFailure } from './failures';
 
 const testProvider = cloudflareArtifacts({
   owner: 'cloudflare',
@@ -62,7 +62,7 @@ class TestWorkflow extends CIWorkflow<CloudflareArtifacts> {
       cwd: 'apps/example',
       env: { NODE_ENV: 'production' },
       config: {
-        retries: { limit: 1, delay: 1_000 },
+        retries: { limit: 1, delay: 1000 },
         timeout: 300_000,
         commandTimeoutMs: 240_000,
         snapshotRetentionSeconds: 7 * 24 * 60 * 60,
@@ -202,10 +202,10 @@ describe('CIWorkflow ci.runner', () => {
     const workflow = new TestWorkflow(fromPartial<ExecutionContext>({}), env);
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
@@ -253,7 +253,7 @@ describe('CIWorkflow ci.runner', () => {
       2,
       'build',
       {
-        retries: { limit: 1, delay: 1_000 },
+        retries: { limit: 1, delay: 1000 },
         timeout: 300_000,
       },
       expect.any(Function)
@@ -287,10 +287,10 @@ describe('CIWorkflow ci.runner', () => {
     );
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
@@ -321,17 +321,19 @@ describe('CIWorkflow ci.runner', () => {
     );
     const step = fromPartial<WorkflowStep>({
       do: vi.fn(
-        async (
+        async <T>(
           _label: string,
           _config: unknown,
-          callback: (context: { attempt: number }) => Promise<unknown>
+          callback: (context: { attempt: number }) => Promise<T>
         ) => callback({ attempt: 1 })
       ),
     });
 
-    const failure = await workflow.run(event, step).catch((error) => error);
+    const failure = await workflow
+      .run(event, step)
+      .catch((error: unknown) => error);
 
-    expect(failure).toBeInstanceOf(CiRunnerFailure);
+    assert(isCiRunnerFailure(failure));
     expect(failure).toMatchObject({
       output: 'install failed',
       runner: {
@@ -377,7 +379,7 @@ describe('CIWorkflow ci.runner', () => {
 
     second.reject(new Error('second failed first'));
     first.reject(new Error('first failed second'));
-    const failure = await running.catch((error) => error);
+    const failure = await running.catch((error: unknown) => error);
 
     expect(failure).toMatchObject({
       runner: { name: 'first', command: 'run first' },
@@ -419,7 +421,7 @@ describe('CIWorkflow ci.runner', () => {
     await vi.waitFor(() => expect(mocks.runCiStep).toHaveBeenCalledTimes(2));
 
     first.resolve(successfulStep('first'));
-    const failure = await running.catch((error) => error);
+    const failure = await running.catch((error: unknown) => error);
 
     expect(mocks.runCiStep).toHaveBeenCalledTimes(3);
     expect(failure).toMatchObject({
@@ -584,10 +586,10 @@ describe('CIWorkflow ci.runner', () => {
 function immediateWorkflowStep() {
   return fromPartial<WorkflowStep>({
     do: vi.fn(
-      async (
+      async <T>(
         _label: string,
         _config: unknown,
-        callback: (context: { attempt: number }) => Promise<unknown>
+        callback: (context: { attempt: number }) => Promise<T>
       ) => callback({ attempt: 1 })
     ),
   });

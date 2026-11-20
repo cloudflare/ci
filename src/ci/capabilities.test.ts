@@ -1,12 +1,18 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach,
+  assert,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 import { fromPartial } from '@total-typescript/shoehorn';
 import type { Bindings } from '../env';
 import type { CiRunStepInput, CloudflareArtifacts } from '../pipeline';
 import type { SourceControlProvider } from '../source-control';
-import {
-  cloudflareArtifacts,
-  type SourceControlAdapter,
-} from '../source-control-adapter';
+import { cloudflareArtifacts } from '../source-control-adapter';
+import type { SourceControlAdapter } from '../source-control-adapter';
 
 const mocks = vi.hoisted(() => ({
   lookupSnapshotCache: vi.fn(),
@@ -105,6 +111,8 @@ describe('runCiStep', () => {
     await expect(
       runCiStep(fromPartial<Bindings>({}), adapter, {
         ...input,
+        // Exercise runtime validation with deliberately invalid input.
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         cloudflareCredentials: 'invalid' as never,
       })
     ).rejects.toThrow(
@@ -281,11 +289,12 @@ describe('runCiStep', () => {
     const failure = await runCiStep(fromPartial<Bindings>({}), adapter, {
       ...input,
       env: { API_TOKEN: 'super-secret-value' },
-    }).catch((error) => error);
+    }).catch((error: unknown) => error);
 
+    assert(failure instanceof Error);
     expect(failure.message).toContain('token=[REDACTED]');
     expect(failure.message).not.toContain('super-secret-value');
-    expect(JSON.stringify(fail.mock.calls[0]![0])).not.toContain(
+    expect(JSON.stringify(fail.mock.calls[0][0])).not.toContain(
       'super-secret-value'
     );
   });

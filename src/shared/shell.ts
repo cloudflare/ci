@@ -2,5 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export function shellQuote(value: string) {
-  return `'${value.replaceAll("'", "'\\''")}'`;
+  return `'${value.replaceAll("'", String.raw`'\''`)}'`;
 }

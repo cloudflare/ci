@@ -1,7 +1,8 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getSandbox, type DirectoryBackup } from '@cloudflare/sandbox';
+import { getSandbox } from '@cloudflare/sandbox';
+import type { DirectoryBackup } from '@cloudflare/sandbox';
 import { posix } from 'node:path';
 import type { Bindings } from '../../env';
 import {
@@ -161,7 +162,7 @@ async function readLog(
   if (size > INLINE_LOG_BYTES) {
     return sandbox.readFileStream(file);
   }
-  return (await sandbox.readFile(file, { encoding: 'utf-8' })).content;
+  return (await sandbox.readFile(file, { encoding: 'utf8' })).content;
 }
 
 async function readPreviews(sandbox: ReturnType<typeof getSandbox>) {

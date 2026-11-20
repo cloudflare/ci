@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { CiRunnerFailure } from './failures';
+import { CiRunnerFailure, isCiRunnerFailure } from './failures';
 import type { CiRunnerResult, DirectoryBackup, RunnerOptions } from './types';
 
 type RunnerInvocation = Pick<RunnerOptions, 'name' | 'command' | 'cwd'>;
@@ -13,8 +13,8 @@ type RunnerInvocation = Pick<RunnerOptions, 'name' | 'command' | 'cwd'>;
  */
 export class RunnerGroup {
   private readonly active = new Set<Promise<CiRunnerResult>>();
-  private readonly failures: CiRunnerFailure[] = [];
-  private readonly invocations: RunnerInvocation[] = [];
+  private readonly failures: Array<CiRunnerFailure> = [];
+  private readonly invocations: Array<RunnerInvocation> = [];
   private nextOrder = 0;
 
   run(
@@ -26,9 +26,9 @@ export class RunnerGroup {
     const order = this.nextOrder++;
     this.invocations.push(runner);
 
-    const execution = execute().catch((cause: unknown) => {
+    const execution = execute().catch((error: unknown) => {
       const failure = new CiRunnerFailure({
-        cause,
+        cause: error,
         order,
         runner,
         snapshot: inherited,
@@ -44,16 +44,19 @@ export class RunnerGroup {
     // Unlike finally(), handling both outcomes consumes the rejection instead
     // of creating an ignored rejected promise. `void` marks cleanup as detached.
     void execution.then(remove, remove);
-    return execution.catch((requestedFailure: CiRunnerFailure) =>
-      this.settle(requestedFailure)
-    );
+    return execution.catch((error: unknown) => {
+      if (!isCiRunnerFailure(error)) {
+        throw error;
+      }
+      return this.settle(error);
+    });
   }
 
   private async settle(requestedFailure: CiRunnerFailure): Promise<never> {
     while (this.active.size > 0) {
       // Runners can chain another runner while the current active set settles.
       // eslint-disable-next-line no-await-in-loop
-      await Promise.allSettled([...this.active]);
+      await Promise.allSettled(this.active);
     }
 
     const failure = this.failures.reduce(
@@ -73,9 +76,12 @@ export class RunnerGroup {
 }
 
 function runnerInvocation(options: RunnerOptions): RunnerInvocation {
-  return {
+  const invocation: RunnerInvocation = {
     name: options.name,
     command: options.command,
-    ...(options.cwd === undefined ? {} : { cwd: options.cwd }),
   };
+  if (options.cwd !== undefined) {
+    invocation.cwd = options.cwd;
+  }
+  return invocation;
 }

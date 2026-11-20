@@ -1,3 +1,4 @@
+import { fromPartial } from '@total-typescript/shoehorn';
 import { describe, expect, it, vi } from 'vitest';
 import { CloudflareArtifactsSourceControlProvider } from './source-control';
 import type { SourceControlRepositoryFilter } from '../source-control-adapter';
@@ -292,9 +293,9 @@ function createProvider(
   return new CloudflareArtifactsSourceControlProvider(
     {
       CLOUDFLARE_ACCOUNT_ID: '0123456789abcdef0123456789abcdef',
-      ARTIFACTS: {
+      ARTIFACTS: fromPartial<Artifacts>({
         get: overrides.get ?? vi.fn().mockResolvedValue(repo),
-      } as unknown as Artifacts,
+      }),
     },
     repository
   );

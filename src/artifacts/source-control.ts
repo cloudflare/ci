@@ -7,11 +7,13 @@ import type { Bindings } from '../env';
 import {
   matchSourceControlTreeBlobs,
   SourceControlProvider,
-  type SourceControlEvent,
-  type SourceControlEventInput,
-  type SourceControlSource,
 } from '../source-control';
-import type { SourceControlTreeBlob } from '../source-control';
+import type {
+  SourceControlEvent,
+  SourceControlEventInput,
+  SourceControlSource,
+  SourceControlTreeBlob,
+} from '../source-control';
 import {
   mapArtifactsPushEventToCiParams,
   parseArtifactsPushEvent,
@@ -33,7 +35,7 @@ type ArtifactsTreeEntry = {
 type ArtifactsCommit = { treeHash: string };
 type ArtifactsRepoReader = {
   readCommit(hash: string): Promise<ArtifactsCommit | null>;
-  readTree(hash: string): Promise<ArtifactsTreeEntry[] | null>;
+  readTree(hash: string): Promise<Array<ArtifactsTreeEntry> | null>;
 };
 
 export class CloudflareArtifactsSourceControlProvider extends SourceControlProvider<CloudflareArtifacts> {
@@ -83,19 +85,19 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
    */
   async listTreeBlobs(
     source: SourceControlSource,
-    paths: string[]
-  ): Promise<SourceControlTreeBlob[] | null> {
+    paths: Array<string>
+  ): Promise<Array<SourceControlTreeBlob> | null> {
     const namespace = this.assertNamespace(source);
-    const repo = (await this.getRepo(
-      namespace,
-      source.repo
-    )) as unknown as ArtifactsRepoReader;
+    const repo = await this.getRepo(namespace, source.repo);
+    // The runtime reader methods are missing from the published binding type.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    const reader = repo as typeof repo & ArtifactsRepoReader;
     try {
-      const commit = await repo.readCommit(source.sha);
+      const commit = await reader.readCommit(source.sha);
       if (!commit) {
         throw new Error(`Artifacts commit not found: ${source.sha}`);
       }
-      const tree = await this.walkTree(repo, commit.treeHash, '');
+      const tree = await this.walkTree(reader, commit.treeHash, '');
       return matchSourceControlTreeBlobs(tree, paths);
     } catch {
       return null;
@@ -108,14 +110,14 @@ export class CloudflareArtifactsSourceControlProvider extends SourceControlProvi
     repo: ArtifactsRepoReader,
     treeHash: string,
     prefix: string
-  ): Promise<SourceControlTreeBlob[]> {
+  ): Promise<Array<SourceControlTreeBlob>> {
     const entries = await repo.readTree(treeHash);
     if (!entries) {
       throw new Error(
         `Artifacts tree not found: ${treeHash} at ${prefix || '/'}`
       );
     }
-    const blobs: SourceControlTreeBlob[] = [];
+    const blobs: Array<SourceControlTreeBlob> = [];
     for (const entry of entries) {
       const path = prefix ? `${prefix}/${entry.name}` : entry.name;
       if (entry.type === 'tree') {

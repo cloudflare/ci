@@ -20,10 +20,10 @@ import type {
   SourceControlSource,
 } from '../source-control';
 import type { SourceControlAdapter } from '../source-control-adapter';
-import {
-  withStepNotification,
-  type CompletedStepExecution,
-  type StepExecution,
+import { withStepNotification } from './step-notification';
+import type {
+  CompletedStepExecution,
+  StepExecution,
 } from './step-notification';
 
 const DEFAULT_SNAPSHOT_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -105,7 +105,7 @@ async function prepareStep(
     source,
     input
   );
-  const extraEnv: Record<string, string> = { ...input.env };
+  const extraEnv: PreparedStep['extraEnv'] = { ...input.env };
   if (
     input.cloudflareCredentials !== undefined &&
     input.cloudflareCredentials !== false

@@ -44,7 +44,7 @@
   },
   "scripts": {
     "build": "tsc --noEmit",
-    "lint": "oxlint",
+    "lint": "oxlint src && oxlint --config oxlint.examples.json examples",
     "typecheck": "tsc --noEmit",
     "format": "oxfmt --write \"**/*.{ts,tsx,md}\" \"!worker-configuration.d.ts\"",
     "format:check": "oxfmt --check \"**/*.{ts,tsx,md}\" \"!worker-configuration.d.ts\"",
@@ -56,12 +56,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@cloudflare/oxlint-config": "0.1.0",
     "@cloudflare/workers-types": "^5.20260730.1",
     "@total-typescript/shoehorn": "^0.1.2",
     "@types/node": "^24.12.0",
     "oxfmt": "^0.32.0",
-    "oxlint": "1.73.0",
-    "oxlint-tsgolint": "0.24.0",
+    "oxlint": "1.94.0",
+    "tsrs": "0.25.0-ts7.1.0-beta",
     "typescript": "6.0.3",
     "vitest": "^4.1.5",
     "wrangler": "4.118.0"

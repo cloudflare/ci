@@ -1,11 +1,8 @@
 // Copyright (c) 2026 Cloudflare, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-  WorkflowEntrypoint,
-  type WorkflowEvent,
-  type WorkflowStep,
-} from 'cloudflare:workers';
+import { WorkflowEntrypoint } from 'cloudflare:workers';
+import type { WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import type {
   CiContext,
   CiParams,
@@ -18,10 +15,8 @@ import type {
   SourceControlProviderDefinition,
   StepConfig,
 } from './types';
-import {
-  cloudflareArtifacts,
-  type SourceControlAdapter,
-} from '../source-control-adapter';
+import { cloudflareArtifacts } from '../source-control-adapter';
+import type { SourceControlAdapter } from '../source-control-adapter';
 import type { Bindings } from '../env';
 import { runCiStep } from '../ci/capabilities';
 import { RunnerGroup } from './runner-group';
@@ -66,7 +61,11 @@ export abstract class CIWorkflow<
   }
 
   private provider(): SourceControlAdapter<TProvider> {
+    // Static methods cannot refer to the provider type parameter of the subclass.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const constructor = this.constructor as typeof CIWorkflow;
+    // Subclasses select their adapter through the static getProvider method.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return constructor.getProvider() as SourceControlAdapter<TProvider>;
   }
 
@@ -100,6 +99,9 @@ export abstract class CIWorkflow<
     adapter: SourceControlAdapter<TProvider>
   ): Promise<CiParams<TProvider> | null> {
     if ('provider' in payload) {
+      // The provider field identifies normalized payloads, but TypeScript cannot
+      // narrow the generic conditional payload type here.
+      // oxlint-disable-next-line quality/no-chained-type-assertions, typescript/no-unsafe-type-assertion
       return payload as unknown as CiParams<TProvider>;
     }
     const event = await adapter.create(this.env).receiveEvent({

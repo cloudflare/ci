@@ -4,10 +4,8 @@
 import { z } from 'zod';
 import type { Bindings } from '../env';
 import type { CacheSnapshotPointer, DirectoryBackup } from '../pipeline';
-import {
-  matchSourceControlTreeBlobs,
-  type SourceControlTreeBlob,
-} from '../source-control';
+import { matchSourceControlTreeBlobs } from '../source-control';
+import type { SourceControlTreeBlob } from '../source-control';
 
 // Pointer to a previously captured snapshot, stored in BACKUP_BUCKET under
 // `cache/<key>.json`. Reused when the cache key's inputs are unchanged.
@@ -33,8 +31,8 @@ export type CacheKeyInput = {
   command: string;
   cwd?: string;
   env?: Record<string, string>;
-  paths: string[];
-  blobs: SourceControlTreeBlob[];
+  paths: Array<string>;
+  blobs: Array<SourceControlTreeBlob>;
 };
 
 // A cache hit yields two distinct things: `snapshot`, the handle to the actual
